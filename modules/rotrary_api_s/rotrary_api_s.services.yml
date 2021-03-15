@@ -1,6 +1,0 @@
-services:
-  rotrary_api_s.event_subscriber:
-    class: Drupal\rotrary_api_s\EventSubscriber\RotraryApiSSubscriber
-    arguments: ['@messenger']
-    tags:
-      - { name: event_subscriber }

@@ -1,0 +1,5 @@
+name: 'Rotary API'
+type: module
+description: 'Apis to connect mobile and registration form'
+core: 8.x
+package: 'Custom'

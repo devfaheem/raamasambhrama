@@ -1,0 +1,13 @@
+{
+    "name": "rotary_api",
+    "type": "drupal-module",
+    "description": "Apis to connect mobile and registration form",
+    "keywords": [
+    ],
+    "homepage": "https://www.drupal.org/project/rotary_api",
+    "minimum-stability": "dev",
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/rotary_api",
+        "source": "http://cgit.drupalcode.org/rotary_api",
+    },
+}

@@ -1,6 +1,0 @@
-rotrary_api_s.settings_form:
-  title: Rotrary Api&#039;s
-  description: Configure Rotrary Api&#039;s.
-  parent: system.admin_config_system
-  route_name: rotrary_api_s.settings_form
-  weight: 10
