@@ -1,0 +1,5 @@
+name: 'Rotary Events Main'
+type: module
+description: 'Event Entities and hooks'
+core: 8.x
+package: 'Custom'

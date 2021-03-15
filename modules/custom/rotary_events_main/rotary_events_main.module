@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Contains rotary_events_main.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function rotary_events_main_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the rotary_events_main module.
+    case 'help.page.rotary_events_main':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Event Entities and hooks') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function rotary_events_main_theme() {
+  return [
+    'rotary_events_main' => [
+      'render element' => 'children',
+    ],
+  ];
+}

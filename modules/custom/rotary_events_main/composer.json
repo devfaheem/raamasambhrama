@@ -1,0 +1,13 @@
+{
+    "name": "rotary_events_main",
+    "type": "drupal-module",
+    "description": "Event Entities and hooks",
+    "keywords": [
+    ],
+    "homepage": "https://www.drupal.org/project/rotary_events_main",
+    "minimum-stability": "dev",
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/rotary_events_main",
+        "source": "http://cgit.drupalcode.org/rotary_events_main",
+    },
+}
