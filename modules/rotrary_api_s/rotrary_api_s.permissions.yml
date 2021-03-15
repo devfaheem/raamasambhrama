@@ -1,0 +1,4 @@
+administer rotrary_api_s configuration:
+  title: 'Administer rotrary_api_s configuration'
+  description: 'Optional description.'
+  restrict access: true

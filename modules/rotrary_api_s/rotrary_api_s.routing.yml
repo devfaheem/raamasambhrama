@@ -1,0 +1,15 @@
+rotrary_api_s.example:
+  path: '/rotrary-api-s/example'
+  defaults:
+    _title: 'Example'
+    _controller: '\Drupal\rotrary_api_s\Controller\RotraryApiSController::build'
+  requirements:
+    _permission: 'access content'
+
+rotrary_api_s.settings_form:
+  path: '/admin/config/system/rotrary-api-s'
+  defaults:
+    _title: 'Rotrary Api&#039;s settings'
+    _form: 'Drupal\rotrary_api_s\Form\SettingsForm'
+  requirements:
+    _permission: 'administer rotrary_api_s configuration'
