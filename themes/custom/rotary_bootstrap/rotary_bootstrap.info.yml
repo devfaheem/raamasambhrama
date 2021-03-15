@@ -1,0 +1,23 @@
+name: Rotary Bootstrap
+type: theme
+description: 'My Awesome theme'
+package: Bootstrap
+core: 8.x
+libraries:
+  - rotary_bootstrap/rotary-global
+
+base theme: bootstrap4
+
+regions:
+  header: Header
+  section_first: Section First
+  scheudles: Schedules
+  section_second: Section Second
+  section_third: Section Third
+  general_questions: General Questions
+  app_info: App Information
+  route_map: Route Map
+  sponsorers: sponsorers
+  footer: Footer
+  content: Content
+

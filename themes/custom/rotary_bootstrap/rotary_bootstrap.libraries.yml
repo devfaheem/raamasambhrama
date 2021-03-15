@@ -1,0 +1,32 @@
+rotary-global:
+  css:
+    theme:
+      css/bootstrap.css: {}
+      css/bootstrap.css: {}
+      css/style.css: {}
+      css/responsive.css: {}
+      css/main.css: {}
+      css/color-switcher-design.css: {}
+  js:
+    js/popper.min.js: {}
+    js/bootstrap.min.js: {}
+    js/jquery-ui.js: {}
+    js/jquery.fancybox.js: {}
+    js/jquery.countdown.js: {}
+    js/appear.js: {}
+    js/owl.js: {}
+    js/wow.js: {}
+    js/parallax.min.js: {}
+    js/script.js: {}
+
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.once
+    - core/drupal.debounce
+vue-library:
+  js:
+    js/vue.js: {}
+    js/axios.min.js: {}
+    js/registration.js: {}
+
