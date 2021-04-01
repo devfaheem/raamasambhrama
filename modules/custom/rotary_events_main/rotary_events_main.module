@@ -6,30 +6,46 @@
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\user\Entity\User;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Implements hook_help().
  */
-function rotary_events_main_help($route_name, RouteMatchInterface $route_match) {
-  switch ($route_name) {
-    // Main module help for the rotary_events_main module.
-    case 'help.page.rotary_events_main':
-      $output = '';
-      $output .= '<h3>' . t('About') . '</h3>';
-      $output .= '<p>' . t('Event Entities and hooks') . '</p>';
-      return $output;
+function rotary_events_main_help($route_name, RouteMatchInterface $route_match)
+{
+    switch ($route_name) {
+        // Main module help for the rotary_events_main module.
+        case 'help.page.rotary_events_main':
+            $output = '';
+            $output .= '<h3>' . t('About') . '</h3>';
+            $output .= '<p>' . t('Event Entities and hooks') . '</p>';
+            return $output;
 
-    default:
-  }
+        default:
+    }
+}
+
+function rotary_events_main_preprocess_page(&$variables, $hook)
+{
+
+    if (in_array("registrant", \Drupal::currentUser()->getRoles()) && \Drupal::request()->getRequestUri() != "/admin/content/payment_acknowledgement/add/default") {
+        $account = User::load(\Drupal::currentUser()->id());
+        if (($account->get("field_payment_status")->value == "Pending")) {
+            $response = new RedirectResponse("/admin/content/payment_acknowledgement/add/default");
+            $response->send();
+        }
+    }
 }
 
 /**
  * Implements hook_theme().
  */
-function rotary_events_main_theme() {
-  return [
-    'rotary_events_main' => [
-      'render element' => 'children',
-    ],
-  ];
+function rotary_events_main_theme()
+{
+    return [
+        'rotary_events_main' => [
+            'render element' => 'children',
+        ],
+    ];
 }
