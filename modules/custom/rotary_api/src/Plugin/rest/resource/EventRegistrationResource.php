@@ -68,6 +68,8 @@ class EventRegistrationResource extends ResourceBase
         $user->set("field_club", $payload["clubId"]);
         $user->set("field_contact_address", $payload["contactAddress"]);
         $user->set("field_payment_mode", $payload["paymentMode"]);
+        $user->set("field_payment_status", "Registered");
+        $user->set("field_food_preference", $payload["foodprefs"]);
         $user->activate();
 
         $user->field_dependants = $this->getDependants($payload);

@@ -1,13 +1,13 @@
 <!--Page Title-->
-    <section class="page-title" style="background-image:url(/themes/custom/rotary_bootstrap/images//background/5.jpg);">
-        <div class="auto-container">
-            <h1>{{label}}</h1>
-         </div>
-    </section>
-    <div class="row mt-4">
-      <div class="col-12">
-        {{content}}
-      </div>
-    </div
+{% set banner_image = file_url(node.field_banner_image.entity.uri.value) %}
 
-    <!--End Page Title-->
+<section class="page-title" style="background-image:url({{banner_image}});">
+	<div class="auto-container">
+		<h1>{{label}}</h1>
+	</div>
+</section>
+<div class="row mt-4">
+	<div class="col-12">
+		{{content}}
+	</div>
+</div<!--EndPageTitle-->

@@ -20,16 +20,20 @@ var app = new Vue({
           mobile: "",
           contactAddress: "",
           currentDesignation: "",
+          totalAmount: "",
           dependants: []
         },
         zones: [],
         clubs: [],
-        csrfToken: ""
+        registrationTypes: [],
+        csrfToken: "",
+        selectedRegistrationType: null
       }
     },
   mounted() {
     this.loadCsrfToken()
     this.loadZones()
+    this.loadRegistrationTypes()
   },
   methods: {
     loadZones: async function () {
@@ -41,8 +45,21 @@ var app = new Vue({
       this.clubs = response.data
 
     },
+    loadRegistrationTypes: async function (event) {
+      var response = await vueAxios.get(`/api/registration-types?_format=json`)
+      this.registrationTypes = response.data
+    },
+    selectRegistrationType: async function (event) {
+
+      this.selectedRegistrationType = this.registrationTypes.find(item => item.tid == event.target.value)
+      this.formData["registrationType"] = this.selectedRegistrationType["tid"];
+    },
     submitRegistration: async function () {
       try {
+        if (this.formData["password"] != this.formData["confirmpassword"]) {
+          alert("Password & Confirm Password do not match")
+          return;
+        }
         var response = await vueAxios.post(`/event/registration`, this.formData)
         window.location = "/complete-message"
       }
@@ -59,30 +76,14 @@ var app = new Vue({
   },
   computed: {
     dependantsCount: function () {
-      switch (parseInt(this.formData.registrationType)) {
-        case 0:
-
-          return 0;
-
-        case 9:
-          this.formData.dependants = [{}]
-          return 1;
-        case 10:
-          this.formData.dependants = [{}]
-          return 1;
-        case 11:
-          this.formData.dependants = [{}]
-          return 1;
-        case 12:
-          this.formData.dependants = [{}, {}]
-          return 2;
-        case 13:
-          this.formData.dependants = [{}, {}, {}]
-          return 3;
-        case 14:
-          this.formData.dependants = [{}, {}, {}, {}]
-          return 4;
+      this.formData.dependants = [];
+      if (this.selectedRegistrationType == null) {
+        return 0
       }
+      for (var i = 0; i < parseInt(this.selectedRegistrationType["totalMembers"]); i++) {
+        this.formData.dependants.push({});
+      }
+      return parseInt(this.selectedRegistrationType["totalMembers"])
     }
   }
 })

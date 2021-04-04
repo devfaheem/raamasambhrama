@@ -6,74 +6,84 @@
 	<main role="main">
 		<div id="app" class="container mt-5" style="margin-top:150px !important">
 			{% verbatim %}
-				<form>
+				<form v-on:submit.prevent="submitRegistration">
 					<div class="row">
 						<div class="col-12">
 							<h1 class="text-center">Welcome, To The Event Registration.</h1>
 						</div>
 						<div class="col-6">
 							<div class="form-group">
-								<label for="yourname">Your Name</label>
-								<input type="text" v-model="formData.registrantName" class="form-control " id="yourname">
-								<small id="emailHelp" class="form-text text-muted">Please Enter Your Name</small>
-							</div>
-							<div class="form-group">
-								<label for="yourname">Password</label>
-								<input type="text" v-model="formData.password" class="form-control " id="password" placeholder="Password">
-								<small id="emailHelp" class="form-text text-muted">This is required</small>
-							</div>
-							<div class="form-group">
-								<label for="registration-type">Registration Type</label>
-								<select id="registration-type" v-model="formData.registrationType" class="custom-select custom-select-sm">
-									<option selected value="0">Select One</option>
-									<option value="9">Rotarian</option>
-									<option value="10">Ann</option>
-									<option value="11">Annet(Above 5 Years)</option>
-									<option value="12">Couple Entry(Husband+Wife)</option>
-									<option value="13">Family Entry (Husband+Wife+1 Child)</option>
-									<option value="14">Special Famiy Entry(Husband+Wife+2 Child)</option>
-								</select>
-							</div>
-
-							<div class="form-group">
-								<label for="club">Club</label>
-								<select id="clubs" v-model="formData.clubId" class="custom-select custom-select-sm">
-									<option selected>Select One</option>
-									<option v-for="club in clubs" :key="club.tid" :value="club.tid">{{club.name}}</option>
-								</select>
-							</div>
-
-							<div class="form-group">
-								<label for="yourname">Mobile</label>
-								<input type="text" v-model="formData.mobile" class="form-control " id="yourname" placeholder="">
+								<label for="yourname">Your Name
+									<span class="text-red">*</span>
+								</label>
+								<input type="text" required v-model="formData.registrantName" class="form-control ">
 							</div>
 						</div>
 						<div class="col-6">
-
 							<div class="form-group">
-								<label for="yourname">Email</label>
-								<input type="text" v-model="formData.email" class="form-control " id="yourname" placeholder="Password">
-								<small id="emailHelp" class="form-text text-muted">This is required</small>
+								<label for="yourname">Email<span class="text-red">*</span>
+								</label>
+								<input type="email" required v-model="formData.email" class="form-control " placeholder="">
 							</div>
-
+						</div>
+						<div class="col-6">
 							<div class="form-group">
-								<label for="yourname">Confrim Password</label>
-								<input type="text" v-model="formData.confirmpassword" class="form-control " id="yourname" placeholder="Password">
-								<small id="emailHelp" class="form-text text-muted">This is required</small>
+								<label for="yourname">Password<span class="text-red">*</span>
+								</label>
+								<input required name="password" type="password" required v-model="formData.password" class="form-control " id="password" placeholder="Password">
 							</div>
-
-
+						</div>
+						<div class="col-6">
 							<div class="form-group">
-								<label for="club">Zone</label>
-								<select id="zones" v-model="formData.zoneId" @change="loadClubs($event)" class="custom-select custom-select-sm">
+								<label for="yourname">Confrim Password<span class="text-red">*</span>
+								</label>
+								<input type="password" required v-model="formData.confirmpassword" class="form-control " placeholder="Password">
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label for="registration-type">Registration Type<span class="text-red">*</span>
+								</label>
+								<select id="registration-type" required @change="selectRegistrationType($event)" class="custom-select custom-select-sm">
+									<option selected>Select One</option>
+									<option v-for="registrationType in registrationTypes" :key="registrationType.tid" :value="registrationType.tid">{{registrationType.name}}</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label for="club">Zone<span class="text-red">*</span>
+								</label>
+								<select id="zones" required v-model="formData.zoneId" @change="loadClubs($event)" class="custom-select custom-select-sm">
 									<option selected>Select One</option>
 									<option v-for="zone in zones" :key="zone.tid" :value="zone.tid">{{zone.name}}</option>
 								</select>
 							</div>
-
+						</div>
+						<div class="col-6">
 							<div class="form-group">
-								<label for="club">Payment Method</label>
-								<select id="club" v-model="formData.paymentMode" class="custom-select custom-select-sm">
+								<label for="club">Club<span class="text-red">*</span>
+								</label>
+								<select id="clubs" required v-model="formData.clubId" class="custom-select custom-select-sm">
+									<option selected>Select One</option>
+									<option v-for="club in clubs" :key="club.tid" :value="club.tid">{{club.name}}</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label for="yourname">Mobile<span class="text-red">*</span>
+								</label>
+								<input type="text" required v-model="formData.mobile" class="form-control " placeholder="">
+							</div>
+						</div>
+
+
+						<div class="col-6">
+							<div class="form-group">
+								<label for="club">Payment Method<span class="text-red">*</span>
+								</label>
+								<select id="club" required v-model="formData.paymentMode" class="custom-select custom-select-sm">
 									<option selected>Select One</option>
 									<option value="cheque">Cheque</option>
 									<option value="neft">Neft</option>
@@ -81,38 +91,67 @@
 									<option value="directbanktransfer">Direct Bank Transfer</option>
 								</select>
 							</div>
-
-
-							<div class="form-group">
-								<label for="yourname">Contact Address</label>
-								<input type="text" v-model="formData.contactAddress" class="form-control " id="yourname" placeholder="">
-							</div>
-
-
 						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label for="yourname">Current Designation<span class="text-red">*</span>
+								</label>
+								<input type="text" required v-model="formData.currentDesignation" class="form-control " placeholder="">
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label for="club">Food Preference<span class="text-red">*</span>
+								</label>
+								<select id="foodprefs" required v-model="formData.foodprefs" class="custom-select custom-select-sm">
+									<option selected>Select One</option>
+									<option value="veg">Veg</option>
+									<option value="neft">Non Veg</option>
+
+								</select>
+							</div>
+						</div>
+
 						<div class="col-12">
 							<div class="form-group">
-								<label for="yourname">Current Designation</label>
-								<input type="text" v-model="formData.currentDesignation" class="form-control " id="yourname" placeholder="">
+								<label for="yourname">Contact Address<span class="text-red">*</span>
+								</label>
+								<textarea type="text" required v-model="formData.contactAddress" class="form-control " placeholder=""></textarea>
 							</div>
 						</div>
-						<div class="col-12" v-if="dependantsCount != 0">
+						<div v-if="selectedRegistrationType!=null" class="col-12 my-4">
+							<div class="col-12">
+								<div class="float-right" style="width: 350px;">
+									<h3>
+										Total Amout:
+										{{selectedRegistrationType["price"]}}
+										INR</h3>
+								</div>
+
+							</div>
+						</div>
+
+
+						<div class="col-12" v-if="this.selectRegistrationType!=null">
 							<table class="table table-striped">
 								<thead>
 									<tr>
 										<th scope="col">#</th>
-										<th scope="col">Full Name</th>
-										<th scope="col">Mobile Number</th>
-										<th scope="col">Food Preference</th>
+										<th scope="col">Full Name<span class="text-red">*</span>
+										</th>
+										<th scope="col">Mobile Number<span class="text-red">*</span>
+										</th>
+										<th scope="col">Food Preference<span class="text-red">*</span>
+										</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr v-for="index in dependantsCount">
 										<th scope="row">{{index}}</th>
-										<td><input type="text" v-model="formData.dependants[index-1]['fullname']" class="form-control "></td>
-										<td><input type="text" v-model="formData.dependants[index-1]['mobilenumber']" class="form-control "></td>
+										<td><input required type="text" v-model="formData.dependants[index-1]['fullname']" class="form-control "></td>
+										<td><input required type="text" v-model="formData.dependants[index-1]['mobilenumber']" class="form-control "></td>
 										<td>
-											<select id="club" v-model="formData.dependants[index-1]['foodprefs']" class="custom-select custom-select-sm">
+											<select required v-model="formData.dependants[index-1]['foodprefs']" class="custom-select custom-select-sm">
 												<option selected>Select One</option>
 												<option value="veg">Veg</option>
 												<option value="nonveg">Non-Veg</option>
@@ -125,7 +164,7 @@
 
 						</div>
 						<div class="col-12 mt-5">
-							<button @click.prevent="submitRegistration()" class="btn btn-primary btn-lg float-right w-100">Register</button>
+							<button type="submit" class="btn btn-primary btn-lg float-right w-100">Register</button>
 						</div>
 
 					</div>

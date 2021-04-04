@@ -31,7 +31,7 @@ function rotary_events_main_preprocess_page(&$variables, $hook)
 
     if (in_array("registrant", \Drupal::currentUser()->getRoles()) && \Drupal::request()->getRequestUri() != "/admin/content/payment_acknowledgement/add/default") {
         $account = User::load(\Drupal::currentUser()->id());
-        if (($account->get("field_payment_status")->value == "Pending")) {
+        if (($account->get("field_payment_status")->value == "Registered")) {
             $response = new RedirectResponse("/admin/content/payment_acknowledgement/add/default");
             $response->send();
         }
