@@ -31,7 +31,7 @@ function rotary_events_main_preprocess_page(&$variables, $hook)
 
     if (in_array("registrant", \Drupal::currentUser()->getRoles()) && \Drupal::request()->getRequestUri() != "/admin/content/payment_acknowledgement/add/default") {
         $account = User::load(\Drupal::currentUser()->id());
-        if (($account->get("field_payment_status")->value == "Registered")) {
+        if (($account->get("field_payment_status")->value == "InformationSubmitted")) {
             $response = new RedirectResponse("/admin/content/payment_acknowledgement/add/default");
             $response->send();
         }
@@ -46,6 +46,10 @@ function rotary_events_main_theme()
     return [
         'rotary_events_main' => [
             'render element' => 'children',
+        ],
+        'registration_approval' => [
+            'render element' => 'form',
+            'template' => 'registration-approval-form',
         ],
     ];
 }

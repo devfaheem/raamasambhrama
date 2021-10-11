@@ -68,7 +68,7 @@ class EventAckResource extends ResourceBase
         $acknowlegement->set("field_reference_number", $payload["referenceId"]);
         $acknowlegement->save();
         $user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
-        $user->set("field_payment_status", "Registered");
+        $user->set("field_payment_status", "PendingFinanceReview");
         $user->save();
         return new ModifiedResourceResponse($acknowlegement, 200);
     }

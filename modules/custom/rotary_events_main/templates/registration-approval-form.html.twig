@@ -1,0 +1,51 @@
+{% set acknowledgement = form["#acknowledgement"] %}
+{% set registrant = form["#registrant"] %}
+{% set decendants = form["#decendants"] %}
+{% set ack_image = file_url(acknowledgement.field_image_upload.entity.uri.value) %}
+<div class="row">
+	<div class="col-12">
+		<h5>Registrant Name :
+			{{registrant.field_registrant_name.value|title }}</h5>
+		<h5>Registration Type :
+			{{registrant.field_registration_type.entity.name.value}}</h5>
+		<h5>Contact Email:
+			{{registrant.mail.value}}</h5>
+		<h5>Contact Phone:
+			{{registrant.field_mobile.value}}</h5>
+		<h5>Payment Status:
+			{{registrant.field_payment_status.value}}</h5>
+
+		<h5 class="my-4">Payment Reference Number:
+			{{acknowledgement.field_reference_number.value}}</h5>
+		<h5 class="my-4">Acknowledgement Reciept:</h5>
+		<img src="{{ack_image}}" width="500"/>
+
+		<h5 class="mt-5">Decendants:</h5>
+
+
+		<table class="table my-3">
+			<thead>
+				<th>Name</th>
+				<th>Mobile</th>
+				<th>Food Preferences</th>
+			</thead>
+			<tbody>
+				{% for decendant in decendants %}
+					<tr>
+						<td>{{decendant.field_name.value}}</td>
+						<td>{{decendant.field_mobile.value}}</td>
+						<td>{{decendant.field_food_preferences.value}}</td>
+
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+		<h5 class="my-5 text-right">Total Amount :
+			{{registrant.field_registration_type.entity.field_cost.value}}
+			Inr</h5>
+
+	</div>
+</div>
+
+{{form}}

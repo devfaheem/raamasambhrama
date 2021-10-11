@@ -1,0 +1,19 @@
+amswap.amswapconfig:
+  type: config_object
+  mapping:
+    role_menu_pairs:
+      type: sequence
+      label: ‘Role Menu pairs’
+      sequence:
+        type: amswap.amswapconfig.role_menu_pairs
+
+amswap.amswapconfig.role_menu_pairs:
+  type: mapping
+  label: ‘Role Menu pairs’
+  mapping:
+    role:
+      type: string
+      label: ‘Role’
+    menu:
+      type: string
+      label: ‘Menu’

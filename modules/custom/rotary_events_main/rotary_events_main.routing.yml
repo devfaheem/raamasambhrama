@@ -1,0 +1,7 @@
+rotary_events_main.registration_approval_form:
+  path: '/event/registration/approval/{user}'
+  defaults:
+    _form: '\Drupal\rotary_events_main\Form\RegistrationApprovalForm'
+    _title: 'RegistrationApprovalForm'
+  requirements:
+    _access: 'TRUE'

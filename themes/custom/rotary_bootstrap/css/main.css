@@ -9,3 +9,33 @@ html{
 .text-red{
   color:red
 }
+
+.home-tile-image{
+height:260px
+}
+
+.main-header .logo-box .logo img{
+    width:139px
+}
+
+html{
+  scroll-behavior: smooth;
+}
+
+.text-red{
+  color:red
+}
+
+
+.speaker-block-three .info-box .name a{
+  font-size: 14px;
+}
+
+.speaker-block-three .info-box .designation{
+  font-size: 12px !important
+}
+
+tr.committe-row-head {
+  background-color: #ec167f;
+  color: #fff;
+}
