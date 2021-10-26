@@ -1,11 +1,15 @@
 <!--Page Title-->
 {% set banner_image = file_url(node.field_banner_image.entity.uri.value) %}
 
+{% if banner_image != '/' %}
 <section class="page-title" style="background-image:url({{banner_image}});">
 	<div class="auto-container">
-		<h1>{{label}}</h1>
+		<h1>{{banner_image}}</h1>
 	</div>
 </section>
+{% else %}
+   <h1>{{label}}</h1>
+{% endif %}
 <div class="row mt-4">
 	<div class="col-12">
 		{{content}}

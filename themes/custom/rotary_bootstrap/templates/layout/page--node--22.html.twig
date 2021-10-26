@@ -13,68 +13,52 @@
 						</div>
 						<div class="col-6">
 							<div class="form-group">
-								<label for="yourname">Your Name
+								<label for="yourname">Full Name
 									<span class="text-red">*</span>
 								</label>
-								<input type="text" required v-model="formData.registrantName" class="form-control ">
-							</div>
-						</div>
-						<div class="col-6">
-							<div class="form-group">
-								<label for="yourname">Email<span class="text-red">*</span>
-								</label>
-								<input type="email" required v-model="formData.email" class="form-control " placeholder="">
-							</div>
-						</div>
-						<div class="col-6">
-							<div class="form-group">
-								<label for="yourname">Password<span class="text-red">*</span>
-								</label>
-								<input required name="password" type="password" required v-model="formData.password" class="form-control " id="password" placeholder="Password">
-							</div>
-						</div>
-						<div class="col-6">
-							<div class="form-group">
-								<label for="yourname">Confrim Password<span class="text-red">*</span>
-								</label>
-								<input type="password" required v-model="formData.confirmpassword" class="form-control " placeholder="Password">
+								<input type="text" v-validate="'required'" name="fullname" v-model="formData.registrantName" class="form-control ">
+								<span class="text-red">{{ errors.first('fullname') }}</span>
 							</div>
 						</div>
 						<div class="col-6">
 							<div class="form-group">
 								<label for="registration-type">Registration Type<span class="text-red">*</span>
 								</label>
-								<select id="registration-type" required @change="selectRegistrationType($event)" class="custom-select custom-select-sm">
+								<select id="registration-type" v-validate="'required'" name="registrationtype"  @change="selectRegistrationType($event)" class="custom-select custom-select-sm">
 									<option selected>Select One</option>
 									<option v-for="registrationType in registrationTypes" :key="registrationType.tid" :value="registrationType.tid">{{registrationType.name}}</option>
 								</select>
+								<span class="text-red">{{ errors.first('registrationtype') }}</span>
 							</div>
 						</div>
 						<div class="col-6">
 							<div class="form-group">
 								<label for="club">Zone<span class="text-red">*</span>
 								</label>
-								<select id="zones" required v-model="formData.zoneId" @change="loadClubs($event)" class="custom-select custom-select-sm">
+								<select id="zones"  v-validate="'required'" name="zone" v-model="formData.zoneId" @change="loadClubs($event)" class="custom-select custom-select-sm">
 									<option selected>Select One</option>
-									<option v-for="zone in zones" :key="zone.tid" :value="zone.tid">{{zone.name}}</option>
+									<option v-for="zone in zones"  :key="zone.tid" :value="zone.tid">{{zone.name}}</option>
 								</select>
+								<span class="text-red">{{ errors.first('zone') }}</span>
 							</div>
 						</div>
 						<div class="col-6">
 							<div class="form-group">
 								<label for="club">Club<span class="text-red">*</span>
 								</label>
-								<select id="clubs" required v-model="formData.clubId" class="custom-select custom-select-sm">
+								<select id="clubs"  v-model="formData.clubId" v-validate="'required'" name="club" class="custom-select custom-select-sm">
 									<option selected>Select One</option>
 									<option v-for="club in clubs" :key="club.tid" :value="club.tid">{{club.name}}</option>
 								</select>
+								<span class="text-red">{{ errors.first('club') }}</span>
 							</div>
 						</div>
 						<div class="col-6">
 							<div class="form-group">
 								<label for="yourname">Mobile<span class="text-red">*</span>
 								</label>
-								<input type="text" required v-model="formData.mobile" class="form-control " placeholder="">
+								<input type="text" v-validate="'required'" name="mobile" v-model="formData.mobile" class="form-control " placeholder="">
+								<span class="text-red">{{ errors.first('mobile') }}</span>
 							</div>
 						</div>
 
@@ -83,32 +67,34 @@
 							<div class="form-group">
 								<label for="club">Payment Method<span class="text-red">*</span>
 								</label>
-								<select id="club" required v-model="formData.paymentMode" class="custom-select custom-select-sm">
+								<select id="club" v-validate="'required'" name="paymentMode" v-model="formData.paymentMode" class="custom-select custom-select-sm">
 									<option selected>Select One</option>
 									<option value="cheque">Cheque</option>
 									<option value="neft">Neft</option>
 									<option value="gpay">Google Pay</option>
 									<option value="directbanktransfer">Direct Bank Transfer</option>
 								</select>
+								<span class="text-red">{{ errors.first('paymentMode') }}</span>
 							</div>
 						</div>
 						<div class="col-6">
 							<div class="form-group">
 								<label for="yourname">Current Designation<span class="text-red">*</span>
 								</label>
-								<input type="text" required v-model="formData.currentDesignation" class="form-control " placeholder="">
+								<input type="text" v-validate="'required'" name="currentDesignation" v-model="formData.currentDesignation" class="form-control " placeholder="">
+								<span class="text-red">{{ errors.first('currentDesignation') }}</span>
 							</div>
 						</div>
 						<div class="col-6">
 							<div class="form-group">
 								<label for="club">Food Preference<span class="text-red">*</span>
 								</label>
-								<select id="foodprefs" required v-model="formData.foodprefs" class="custom-select custom-select-sm">
+								<select id="foodprefs" v-validate="'required'" name="foodprefs" v-model="formData.foodprefs" class="custom-select custom-select-sm">
 									<option selected>Select One</option>
 									<option value="veg">Veg</option>
-									<option value="neft">Non Veg</option>
-
+									<option value="nonveg">Non Veg</option>
 								</select>
+								<span class="text-red">{{ errors.first('foodprefs') }}</span>
 							</div>
 						</div>
 
@@ -116,7 +102,8 @@
 							<div class="form-group">
 								<label for="yourname">Contact Address<span class="text-red">*</span>
 								</label>
-								<textarea type="text" required v-model="formData.contactAddress" class="form-control " placeholder=""></textarea>
+								<textarea type="text" v-validate="'required'" name="contactAddress" v-model="formData.contactAddress" class="form-control " placeholder=""></textarea>
+								<span class="text-red">{{ errors.first('contactAddress') }}</span>
 							</div>
 						</div>
 						<div v-if="selectedRegistrationType!=null" class="col-12 my-4">
@@ -130,9 +117,11 @@
 
 							</div>
 						</div>
+						
 
-
-						<div class="col-12" v-if="this.selectRegistrationType!=null">
+						<div class="col-12" v-if="this.selectRegistrationType!=null && dependantsCount >0">
+						<hr />
+						<h3> Ann's Registration
 							<table class="table table-striped">
 								<thead>
 									<tr>
@@ -146,16 +135,23 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr v-for="index in dependantsCount">
+									<tr v-for="index in dependantsCount" :key="index">
 										<th scope="row">{{index}}</th>
-										<td><input required type="text" v-model="formData.dependants[index-1]['fullname']" class="form-control "></td>
-										<td><input required type="text" v-model="formData.dependants[index-1]['mobilenumber']" class="form-control "></td>
 										<td>
-											<select required v-model="formData.dependants[index-1]['foodprefs']" class="custom-select custom-select-sm">
+										<input  type="text" v-validate="'required'" :name="'user2fullname'+index" key="user2fullname" v-model="formData.dependants[index-1]['fullname']" class="form-control ">
+										<span class="text-red">{{errors.first("user2fullname" + index)}}</span>
+										</td>
+										<td>
+										<input  type="text" v-validate="'required'" :name="'user2mobilenumber'+index" key="user2mobilenumber" v-model="formData.dependants[index-1]['mobilenumber']" class="form-control ">
+										<span class="text-red">{{errors.first("user2mobilenumber" + index)}}</span>
+										</td>
+										<td>
+											<select  v-validate="'required'" :name="'user2foodprefs'+index" key="user2foodprefs" v-model="formData.dependants[index-1]['foodprefs']" class="custom-select custom-select-sm">
 												<option selected>Select One</option>
 												<option value="veg">Veg</option>
 												<option value="nonveg">Non-Veg</option>
 											</select>
+											<span class="text-red">{{errors.first("user2foodprefs" + index)}}</span>
 										</td>
 									</tr>
 								</tbody>
