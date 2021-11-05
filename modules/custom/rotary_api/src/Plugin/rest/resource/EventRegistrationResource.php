@@ -54,31 +54,16 @@ class EventRegistrationResource extends ResourceBase
      */
     public function post($payload)
     {   
+        $userName = $this->getUserName($payload["mobile"]);
         $pincode = random_int(100000, 999999);
-        $errors = [];
-        if($this->isDuplicateUserName($payload["mobile"]))
-        {
-            return new JsonResponse(["error"=>"Mobile number already registered."], 422);
-        }
-        # couple registration
-        if($payload["registrationType"]=="12"){
-            $ann = $payload["dependants"][0] ;
-            if($ann["mobilenumber"]==$payload["mobile"]){
-                return new JsonResponse(["error"=>"Rotarian and Ann's mobile numbers should not be same."], 422);
-            }
-        }
-
-        if(count($errors)>0){
-            return new JsonResponse(["error"=>"duplicate asdeasd"], 422);
-        }
-
+        $registrationType = $payload["registrationType"];        
         $recieptId = $this->gerRecieptNumber();
-
         $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
         $user = \Drupal\user\Entity\User::create();
         $user->setPassword($pincode);
-        $user->setEmail($payload["mobile"]."@raamasambrama.com");
-        $user->setUsername($payload["mobile"]);
+        $user->set("field_password_raw", $pincode);
+        $user->setEmail($userName."@raamasambrama.com");
+        $user->setUsername($userName);
         $user->addRole("registrant");
         $user->set("field_reciept_id", $recieptId);
         $user->set("field_registration_type", $payload["registrationType"]);
@@ -90,27 +75,25 @@ class EventRegistrationResource extends ResourceBase
         $user->set("field_contact_address", $payload["contactAddress"]);
         $user->set("field_payment_mode", $payload["paymentMode"]);
         $user->set("field_payment_status", "InformationSubmitted");
-        $user->set("field_password_raw", $pincode);
         $user->set("field_food_preference", $payload["foodprefs"]);
         $user->activate();
 
         // Couple Registration
-        if($payload["registrationType"]=="12"){
-           
-            $ann = $payload["dependants"][0];
-            if($ann["mobilenumber"]==$payload["mobile"])
-            return new ModifiedResourceResponse(["error" => "duplicate mobile"], 422);
-            if($this->isDuplicateUserName($ann["mobilenumber"]))
-            {
-                return new JsonResponse(["error"=>"Mobile number already registered for Ann."], 422);
+        if($registrationType=="12"){
+            $annsPincode = random_int(100000, 999999);
+            $ann = $payload["dependants"][0] ;
+            $annUserName = $this->getUserName($ann["mobilenumber"]);
+            if($ann["mobilenumber"]==$payload["mobile"]){
+                $annUserName = $payload["mobile"]."_1";
             }
+            $ann = $payload["dependants"][0];
             $user2 = \Drupal\user\Entity\User::create();
-            $user2->setPassword($pincode);
-            $user2->setEmail($ann["mobilenumber"]."@raamasambrama.com");
-            $user2->setUsername($ann["mobilenumber"]);
+            $user2->setPassword($annsPincode);
+            $user2->setEmail($annUserName."@raamasambrama.com");
+            $user2->setUsername($annUserName);
             $user2->addRole("registrant");
             $user2->set("field_reciept_id", $recieptId);
-            $user2->set("field_password_raw", $pincode);
+            $user2->set("field_password_raw", $annsPincode);
             $user2->set("field_registration_type", $payload["registrationType"]);
             $user2->set("field_registrant_name", $ann["fullname"]);
             $user2->set("field_current_designation", "Ann");
@@ -137,6 +120,17 @@ class EventRegistrationResource extends ResourceBase
             // return
         }
 
+    }
+
+    public function getUserName($mobile){
+        $db = \Drupal::database();
+        $result = $db->query(" select max(name) as uname from users_field_data as u right join user__field_mobile as um on um.entity_id  = u .uid where um.field_mobile_value = '$mobile'");
+        $val = $result->fetchField();
+        if($val == null) {
+            return $mobile;
+        }
+        $prefix = substr($val, -1)+1;
+        return $mobile."_".$prefix;
     }
 
     public function gerRecieptNumber(){
