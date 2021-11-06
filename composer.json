@@ -23,8 +23,7 @@
         "drupal/core-vendor-hardening": "^8.8",
         "drupal/form_mode_manager": "^1.4",
         "drupal/simple_oauth": "^5.0",
-        "drupal/user_field_value": "^1.1",
-        "phpoffice/phpspreadsheet": "^1.19"
+        "drupal/user_field_value": "^1.1"
     },
     "conflict": {
         "drupal/drupal": "*"
