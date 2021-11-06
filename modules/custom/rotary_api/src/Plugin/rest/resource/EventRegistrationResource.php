@@ -82,7 +82,11 @@ class EventRegistrationResource extends ResourceBase
         if($registrationType=="12"){
             $annsPincode = random_int(100000, 999999);
             $ann = $payload["dependants"][0] ;
-            $annUserName = $this->getUserName($ann["mobilenumber"]);
+            $annUserName = $ann["mobilenumber"];
+            if($annUserName == $payload["mobile"])
+            {
+                $annUserName = $annUserName."_1";
+            }
             $ann = $payload["dependants"][0];
             $user2 = \Drupal\user\Entity\User::create();
             $user2->setPassword($annsPincode);
