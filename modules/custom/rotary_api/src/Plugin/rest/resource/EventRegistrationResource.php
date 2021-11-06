@@ -83,9 +83,6 @@ class EventRegistrationResource extends ResourceBase
             $annsPincode = random_int(100000, 999999);
             $ann = $payload["dependants"][0] ;
             $annUserName = $this->getUserName($ann["mobilenumber"]);
-            if($ann["mobilenumber"]==$payload["mobile"]){
-                $annUserName = $payload["mobile"]."_1";
-            }
             $ann = $payload["dependants"][0];
             $user2 = \Drupal\user\Entity\User::create();
             $user2->setPassword($annsPincode);
@@ -112,14 +109,57 @@ class EventRegistrationResource extends ResourceBase
         $result = [];
         try {
             $result = $user->save();
-            if($user2!=null)
-            $result2 = $user2->save();
+            $this->generateDeliverables($user->id(),$payload["zoneId"],$payload["clubId"]);
+            if($user2!=null){
+                $result2 = $user2->save();
+                $this->generateDeliverables($user2->id(),$payload["zoneId"],$payload["clubId"]);
+                $this->sendSmsNotification($annUserName,$ann["mobilenumber"],$annsPincode);
+            }
+            $this->sendSmsNotification($userName,$payload["mobile"],$pincode);
             return new ModifiedResourceResponse(["message"=>"Registered Successfully"], 200);
         } catch (\Drupal\Core\Entity\EntityStorageException $exception) {
             return new ModifiedResourceResponse(["error" => str_contains($exception->getMessage(),"1062 Duplicate entry")?"Mobile number already registered.":$exception->getMessage()], 422);
-            // return
         }
 
+    }
+
+    public function sendSmsNotification($username, $mobile, $pincode)
+    {
+        $textLocal = new \Drupal\rotary_api\Controller\TextLocalProvider('usha.cs@sahyadri.edu.in', 'Aptra2017', false);
+        $numbers = array('+91' . $mobile);
+        $sender = 'APTTCH';
+        $message = "Dear Students, For your information " . "UserName: $username" . ' ' . "Pincode: $pincode" . " Thank You.";
+        try {
+            $result = $textLocal->sendSms($numbers, $message, $sender); } catch (\Exception $e) {
+            die('Error1: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            die('Error1: ' . $e->getMessage());
+        }
+    }
+
+    public function generateDeliverables($userId, $zoneId, $clubId){
+        $db = \Drupal::database();
+        $deliverables = $db->query("select nid,type from node where type = 'deliverable'");
+        $deliverables = $deliverables->fetchCol();
+        foreach($deliverables as $deliverable){
+            $this->generateDeliverable($userId,$zoneId,$clubId,$deliverable);
+        }
+    }
+
+    public function generateDeliverable($userId, $zoneId, $clubId, $deliverableId){
+        $entityType = "user_deliverables_entity";
+        $bundleName = "default";
+        $entity = entity_create($entityType, array('type' => $bundleName));
+        $entity->set("name","User Deliverable");
+        $entity->set("registrant_id",$userId);
+        $entity->set("deliverable",$deliverableId);
+        $entity->set("zone",$zoneId);
+        $entity->set("club",$clubId);
+        $entity->set("is_scanned",FALSE);
+        $entity->set("status",TRUE);
+        $entity->set("user_id",1);
+        $entity->save();
+        var_dump($entity->id());
     }
 
     public function getUserName($mobile){

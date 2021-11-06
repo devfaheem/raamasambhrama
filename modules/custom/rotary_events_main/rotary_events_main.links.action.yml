@@ -1,0 +1,5 @@
+entity.user_deliverables_entity.add_form:
+  route_name: entity.user_deliverables_entity.add_form
+  title: 'Add User deliverables entity'
+  appears_on:
+    - entity.user_deliverables_entity.collection

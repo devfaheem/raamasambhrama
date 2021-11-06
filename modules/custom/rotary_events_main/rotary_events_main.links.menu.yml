@@ -1,0 +1,14 @@
+
+# User deliverables entity menu items definition
+entity.user_deliverables_entity.collection:
+  title: 'User deliverables entity list'
+  route_name: entity.user_deliverables_entity.collection
+  description: 'List User deliverables entity entities'
+  parent: system.admin_structure
+  weight: 100
+
+user_deliverables_entity.admin.structure.settings:
+  title: 'User deliverables entity settings'
+  description: 'Configure User deliverables entity entities'
+  route_name: user_deliverables_entity.settings
+  parent: system.admin_structure

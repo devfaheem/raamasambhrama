@@ -16,14 +16,15 @@
     ],
     "require": {
         "composer/installers": "^1.2",
-        "drupal/console": "~1.0",
+        "drupal/console": "^1.9",
         "drupal/core-composer-scaffold": "^8.8",
         "drupal/core-project-message": "^8.8",
         "drupal/core-recommended": "^8.8",
         "drupal/core-vendor-hardening": "^8.8",
         "drupal/form_mode_manager": "^1.4",
         "drupal/simple_oauth": "^5.0",
-        "drupal/user_field_value": "^1.1"
+        "drupal/user_field_value": "^1.1",
+        "phpoffice/phpspreadsheet": "^1.19"
     },
     "conflict": {
         "drupal/drupal": "*"

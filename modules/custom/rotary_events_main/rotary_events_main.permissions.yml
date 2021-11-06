@@ -1,0 +1,20 @@
+add user deliverables entity entities:
+  title: 'Create new User deliverables entity entities'
+
+administer user deliverables entity entities:
+  title: 'Administer User deliverables entity entities'
+  description: 'Allow to access the administration form to configure User deliverables entity entities.'
+  restrict access: true
+
+delete user deliverables entity entities:
+  title: 'Delete User deliverables entity entities'
+
+edit user deliverables entity entities:
+  title: 'Edit User deliverables entity entities'
+
+view published user deliverables entity entities:
+  title: 'View published User deliverables entity entities'
+
+view unpublished user deliverables entity entities:
+  title: 'View unpublished User deliverables entity entities'
+
