@@ -159,7 +159,6 @@ class EventRegistrationResource extends ResourceBase
         $entity->set("status",TRUE);
         $entity->set("user_id",1);
         $entity->save();
-        var_dump($entity->id());
     }
 
     public function getUserName($mobile){
