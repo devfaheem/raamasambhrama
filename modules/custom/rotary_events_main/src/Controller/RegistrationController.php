@@ -43,7 +43,7 @@ class RegistrationController extends ControllerBase
     $result = $db->query($query);
     $userid = $result->fetchField();
     $pincode = random_int(100000, 999999);
-    $account = \Drupal\user\Entity\User::load(1);
+    $account = \Drupal\user\Entity\User::load($userid);
     $account->setPassword($pincode);
     $account->set("field_password_raw", $pincode);
     $mobile = $account->get('field_mobile')->getValue()[0]["value"];
