@@ -24,10 +24,21 @@ rotary-global:
     - core/drupal
     - core/jquery.once
     - core/drupal.debounce
-vue-library:
+vue-single-registration:
   js:
     js/vue.js: {}
     js/axios.min.js: {}
     https://unpkg.com/vee-validate@<3.0.0: {external: true, minified: true}
     js/registration.js: {}
+    js/registration.js: {}
+
+vue-multi-registration:
+  js:
+    js/vue.js: {}
+    js/axios.min.js: {}
+    https://unpkg.com/vee-validate@<3.0.0: {external: true, minified: true}
+    js/registration.js: {}
+    js/multi_registration.js: {}
+
+
 

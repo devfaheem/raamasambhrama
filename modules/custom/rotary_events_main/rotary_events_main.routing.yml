@@ -5,3 +5,29 @@ rotary_events_main.registration_approval_form:
     _title: 'RegistrationApprovalForm'
   requirements:
     _access: 'TRUE'
+
+rotary_events_main.registration_controller_registration:
+  path: '/3182event/registration'
+  defaults:
+    _controller: '\Drupal\rotary_events_main\Controller\RegistrationController::registrationForm'
+    _title: 'Single Registration Form'
+  requirements:
+    _access: 'TRUE'
+
+rotary_events_main.multi_registration:
+  path: '/3182event/multiple/registration'
+  defaults:
+    _controller: '\Drupal\rotary_events_main\Controller\RegistrationController::multipleRegistrationForm'
+    _title: 'Multiple Registration Form'
+  requirements:
+    _access: 'TRUE'
+
+
+rotary_events_main.reset_pincode:
+  path: "/3182event/reset/password"
+  methods: [POST]
+  defaults:
+    _controller: '\Drupal\rotary_events_main\Controller\RegistrationController::resetPincode'
+    _title: "Profaligner - Get Case Versions"
+  requirements:
+    _access: "TRUE"

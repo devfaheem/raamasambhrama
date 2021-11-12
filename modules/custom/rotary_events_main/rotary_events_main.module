@@ -38,6 +38,15 @@ function rotary_events_main_preprocess_page(&$variables, $hook)
     }
 }
 
+function rotary_events_main_payment_acknowledgement_insert(\Drupal\Core\Entity\EntityInterface $acknowledgement){
+    if(in_array("registrant", \Drupal::currentUser()->getRoles()))
+    {
+        $account = User::load(\Drupal::currentUser()->id());
+        $account->set("field_payment_status", "PendingFinanceReview");
+        $account->save();
+    }  
+}
+
 /**
  * Implements hook_theme().
  */
@@ -51,5 +60,15 @@ function rotary_events_main_theme()
             'render element' => 'form',
             'template' => 'registration-approval-form',
         ],
+        'single_registration_form'=> [
+        'template'=>'single-registration-form',
+        'variables'=>[
+         ]
+        ],
+        'multiple_registration_form'=> [
+        'template'=>'multiple-registration-form',
+        'variables'=>[
+         ]
+        ]
     ];
 }

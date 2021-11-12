@@ -54,6 +54,59 @@ class EventRegistrationResource extends ResourceBase
      */
     public function post($payload)
     {   
+        $registrationType = \Drupal::request()->query->get('registrationtype');
+        if($registrationType=="single")
+        return $this->singleRegistration($payload);
+        else if($registrationType=="multiple")
+        return $this->multipleRegistration($payload);
+
+    }
+
+    public function multipleRegistration($users){
+        $connection = \Drupal::database();
+        $transaction = $connection->startTransaction();
+        try{
+            foreach($users as $payload){
+                $this->registerUser($payload);
+            }
+            return new ModifiedResourceResponse(["message"=>"Users Registered Successfully"], 200);
+        }
+        catch (\Exception $e) {
+            $transaction->rollBack();
+            return new ModifiedResourceResponse(["message"=>"No Users Registered"], 422);;
+          }
+    }
+
+    public function registerUser($payload){
+        $userName = $this->getUserName($payload["mobile"]);
+        $pincode = random_int(100000, 999999);
+        $registrationType = $payload["registrationType"];        
+        $recieptId = $this->gerRecieptNumber();
+        $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+        $user = \Drupal\user\Entity\User::create();
+        $user->setPassword($pincode);
+        $user->set("field_password_raw", $pincode);
+        $user->setEmail($userName."@raamasambrama.com");
+        $user->setUsername($userName);
+        $user->addRole("registrant");
+        $user->set("field_reciept_id", $recieptId);
+        $user->set("field_registration_type", $payload["registrationType"]);
+        $user->set("field_registrant_name", $payload["registrantName"]);
+        $user->set("field_current_designation", $payload["currentDesignation"]);
+        $user->set("field_mobile", $payload["mobile"]);
+        $user->set("field_zone", $payload["zoneId"]);
+        $user->set("field_club", $payload["clubId"]);
+        $user->set("field_contact_address", $payload["contactAddress"]);
+        $user->set("field_payment_mode", $payload["paymentMode"]);
+        $user->set("field_payment_status", "PendingFinanceReview");
+        $user->set("field_food_preference", $payload["foodprefs"]);
+        $user->activate();
+        $result = $user->save();
+        $this->generateDeliverables($user->id(),$payload["zoneId"],$payload["clubId"]);
+        $this->sendSmsNotification($userName,$payload["mobile"],$pincode);
+    }
+
+    public function singleRegistration($payload){
         $userName = $this->getUserName($payload["mobile"]);
         $pincode = random_int(100000, 999999);
         $registrationType = $payload["registrationType"];        
@@ -85,7 +138,7 @@ class EventRegistrationResource extends ResourceBase
             $annUserName = $ann["mobilenumber"];
             if($annUserName == $payload["mobile"])
             {
-                $annUserName = $annUserName."_1";
+                $annUserName = $ann["mobilenumber"]."_".$this->addPrefix($userName);
             }
             $ann = $payload["dependants"][0];
             $user2 = \Drupal\user\Entity\User::create();
@@ -124,7 +177,6 @@ class EventRegistrationResource extends ResourceBase
         } catch (\Drupal\Core\Entity\EntityStorageException $exception) {
             return new ModifiedResourceResponse(["error" => str_contains($exception->getMessage(),"1062 Duplicate entry")?"Mobile number already registered.":$exception->getMessage()], 422);
         }
-
     }
 
     public function sendSmsNotification($username, $mobile, $pincode)
@@ -132,7 +184,8 @@ class EventRegistrationResource extends ResourceBase
         $textLocal = new \Drupal\rotary_api\Controller\TextLocalProvider('usha.cs@sahyadri.edu.in', 'Aptra2017', false);
         $numbers = array('+91' . $mobile);
         $sender = 'APTTCH';
-        $message = "Dear Students, For your information " . "UserName: $username" . ' ' . "Pincode: $pincode" . " Thank You.";
+        $message = "Dear Member, Please note your credentials UserName: $username and Pincode: $pincode. Thank you. APTTCH";
+        // $message = "Dear Member, Please note your credentials UserName: " . "UserName: $username" . ' ' . "Pincode: $pincode" . " Thank You.";
         try {
             $result = $textLocal->sendSms($numbers, $message, $sender); } catch (\Exception $e) {
             die('Error1: ' . $e->getMessage());
@@ -167,13 +220,29 @@ class EventRegistrationResource extends ResourceBase
 
     public function getUserName($mobile){
         $db = \Drupal::database();
-        $result = $db->query(" select max(name) as uname from users_field_data as u right join user__field_mobile as um on um.entity_id  = u .uid where um.field_mobile_value = '$mobile'");
-        $val = $result->fetchField();
+        $query = " select name,created as uname from users_field_data as u right join user__field_mobile as um on um.entity_id  = u .uid where um.field_mobile_value = '$mobile' order by created desc";
+        $result = $db->query($query);
+        try{
+            $result = $result->fetchAll();
+            $val = $result[0]->name;
+        }
+        catch(\Exception $e){
+            return $mobile;
+        }
         if($val == null) {
             return $mobile;
         }
-        $prefix = substr($val, -1)+1;
+       
+        $prefix = $this->addPrefix($val);
         return $mobile."_".$prefix;
+    }
+
+    public function addPrefix($username){
+        if(substr($username, -2,-1) == "_")
+        $prefix = substr($username, -1)+1;
+        else
+        $prefix = substr($username, -2)+1;
+        return $prefix;
     }
 
     public function gerRecieptNumber(){

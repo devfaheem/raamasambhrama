@@ -39,3 +39,7 @@ tr.committe-row-head {
   background-color: #ec167f;
   color: #fff;
 }
+
+body {
+  color:black !important;
+}
