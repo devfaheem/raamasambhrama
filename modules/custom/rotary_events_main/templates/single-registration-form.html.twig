@@ -10,8 +10,9 @@
 					<div class="row">
 						<div class="col-12">
 							<h1 class="text-center">Welcome, To The Event Registration.</h1>
-                            <h6 class="text-center mb-3">for multiple registration click <a href="/3182event/multiple/registration">here</a>.</h6>
-                        </div>
+							<h6 class="text-center mb-3">for multiple registration click
+								<a href="/3182event/multiple/registration">here</a>.</h6>
+						</div>
 						<div class="col-6">
 							<div class="form-group">
 								<label for="yourname">Full Name
@@ -25,20 +26,49 @@
 							<div class="form-group">
 								<label for="registration-type">Registration Type<span class="text-red">*</span>
 								</label>
-								<select id="registration-type" v-validate="'required'" name="registrationtype"  @change="selectRegistrationType($event)" class="custom-select custom-select-sm">
+								<select id="registration-type" v-validate="'required'" name="registrationtype" @change="selectRegistrationType($event)" class="custom-select custom-select-sm">
 									<option selected>Select One</option>
 									<option v-for="registrationType in registrationTypes" :key="registrationType.tid" :value="registrationType.tid">{{registrationType.name}}</option>
 								</select>
 								<span class="text-red">{{ errors.first('registrationtype') }}</span>
 							</div>
 						</div>
+						<div class="col-12" v-if="this.selectRegistrationType!=null && dependantsCount >0">
+							<div class="row" v-for="index in dependantsCount" :key="index">
+								<div class="col-6">
+									<div class="form-group">
+									<label >Ann's Full Name<span class="text-red">*</span></label>
+										<input type="text" v-validate="'required'" :name="'user2fullname'+index" key="user2fullname" v-model="formData.dependants[index-1]['fullname']" class="form-control ">
+										<span class="text-red">{{errors.first("user2fullname" + index)}}</span>
+									</div>
+								</div>
+								<div class="col-6">
+									<div class="form-group">
+									<label >Ann's Mobile<span class="text-red">*</span></label>
+										<input type="text" v-validate="'required'" :name="'user2mobilenumber'+index" key="user2mobilenumber" v-model="formData.dependants[index-1]['mobilenumber']" class="form-control ">
+										<span class="text-red">{{errors.first("user2mobilenumber" + index)}}</span>
+									</div>
+								</div>
+								<div class="col-6">
+									<div class="form-group">
+									<label >Ann's Food Prefs<span class="text-red">*</span></label>
+										<select v-validate="'required'" :name="'user2foodprefs'+index" key="user2foodprefs" v-model="formData.dependants[index-1]['foodprefs']" class="custom-select custom-select-sm">
+											<option selected>Select One</option>
+											<option value="veg">Veg</option>
+											<option value="nonveg">Non-Veg</option>
+										</select>
+										<span class="text-red">{{errors.first("user2foodprefs" + index)}}</span>
+									</div>
+								</div>
+							</div>
+						</div>
 						<div class="col-6">
 							<div class="form-group">
 								<label for="club">Zone<span class="text-red">*</span>
 								</label>
-								<select id="zones"  v-validate="'required'" name="zone" v-model="formData.zoneId" @change="loadClubs($event)" class="custom-select custom-select-sm">
+								<select id="zones" v-validate="'required'" name="zone" v-model="formData.zoneId" @change="loadClubs($event)" class="custom-select custom-select-sm">
 									<option selected>Select One</option>
-									<option v-for="zone in zones"  :key="zone.tid" :value="zone.tid">{{zone.name}}</option>
+									<option v-for="zone in zones" :key="zone.tid" :value="zone.tid">{{zone.name}}</option>
 								</select>
 								<span class="text-red">{{ errors.first('zone') }}</span>
 							</div>
@@ -47,7 +77,7 @@
 							<div class="form-group">
 								<label for="club">Club<span class="text-red">*</span>
 								</label>
-								<select id="clubs"  v-model="formData.clubId" v-validate="'required'" name="club" class="custom-select custom-select-sm">
+								<select id="clubs" v-model="formData.clubId" v-validate="'required'" name="club" class="custom-select custom-select-sm">
 									<option selected>Select One</option>
 									<option v-for="club in clubs" :key="club.tid" :value="club.tid">{{club.name}}</option>
 								</select>
@@ -118,258 +148,219 @@
 
 							</div>
 						</div>
+
+
 						
+							<div class="row mt-5">
 
-						<div class="col-12" v-if="this.selectRegistrationType!=null && dependantsCount >0">
-						<hr />
-						<h3> Ann's Registration
-							<table class="table table-striped">
-								<thead>
-									<tr>
-										<th scope="col">#</th>
-										<th scope="col">Full Name<span class="text-red">*</span>
-										</th>
-										<th scope="col">Mobile Number<span class="text-red">*</span>
-										</th>
-										<th scope="col">Food Preference<span class="text-red">*</span>
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr v-for="index in dependantsCount" :key="index">
-										<th scope="row">{{index}}</th>
-										<td>
-										<input  type="text" v-validate="'required'" :name="'user2fullname'+index" key="user2fullname" v-model="formData.dependants[index-1]['fullname']" class="form-control ">
-										<span class="text-red">{{errors.first("user2fullname" + index)}}</span>
-										</td>
-										<td>
-										<input  type="text" v-validate="'required'" :name="'user2mobilenumber'+index" key="user2mobilenumber" v-model="formData.dependants[index-1]['mobilenumber']" class="form-control ">
-										<span class="text-red">{{errors.first("user2mobilenumber" + index)}}</span>
-										</td>
-										<td>
-											<select  v-validate="'required'" :name="'user2foodprefs'+index" key="user2foodprefs" v-model="formData.dependants[index-1]['foodprefs']" class="custom-select custom-select-sm">
-												<option selected>Select One</option>
-												<option value="veg">Veg</option>
-												<option value="nonveg">Non-Veg</option>
-											</select>
-											<span class="text-red">{{errors.first("user2foodprefs" + index)}}</span>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-
-
-						</div>
-						<div class="row mt-5">
-
-							<div class="col-md-12">
-								<div class="row">
-									<div class="col-md-12 text-center border">
-										<p>
-											<h4>
-												<b>District Conference Bank Account Details : RID 3182 DISCON 2022</b>
-											</h4>
-											<br/>
-
-											<h4>
-												<b>CENTRAL BANK OF INDIA, Shimoga I Current A/c No : 5107575111 I IFSC CODE : CBIN 0283553</b>
-											</h4>
-										</p>
-									</div>
-								</div>
-								<div class="row mt-4">
-									<div class="col-md-3">
-										<h4>
-											<b>Rtn. Ramachandra Murthy M.G</b>
-										</h4>
-										<hr/>
-										<p>Contact : 9844077236</p>
-										<p>Dist. Governor 2021-22</p>
-									</div>
-									<div class="col-md-3">
-										<h4>
-											<b>Rtn. Gururaj S 
-											<br/>
-											Girimaji</b>
-										</h4>
-										<hr/>
-										<p>Contact : 9243322238</p>
-										<p>Chairman - Dist.Conf.</p>
-									</div>
-									<div class="col-md-3">
-										<h4>
-											<b>Rtn. Srinath R
+								<div class="col-md-12">
+									<div class="row">
+										<div class="col-md-12 text-center border">
+											<p>
+												<h4>
+													<b>District Conference Bank Account Details : RID 3182 DISCON 2022</b>
+												</h4>
 												<br/>
-												Girimaji</b>
-										</h4>
-										<hr/>
-										<p>Contact : 9242407589</p>
-										<p>Secretary - Dist.Conf.</p>
-									</div>
-									<div class="col-md-3">
-										<h4>
-											<b>Rtn. M.Nagaraj</b>
 
-										</h4>
-										<br/>
-										<hr/>
-										<p>Contact : 9448403669</p>
-										<p>Chairman - Registration Committee</p>
+												<h4>
+													<b>CENTRAL BANK OF INDIA, Shimoga I Current A/c No : 5107575111 I IFSC CODE : CBIN 0283553</b>
+												</h4>
+											</p>
+										</div>
 									</div>
+									<div class="row mt-4">
+										<div class="col-md-3">
+											<h4>
+												<b>Rtn. Ramachandra Murthy M.G</b>
+											</h4>
+											<hr/>
+											<p>Contact : 9844077236</p>
+											<p>Dist. Governor 2021-22</p>
+										</div>
+										<div class="col-md-3">
+											<h4>
+												<b>Rtn. Gururaj S
+													<br/>
+													Girimaji</b>
+											</h4>
+											<hr/>
+											<p>Contact : 9243322238</p>
+											<p>Chairman - Dist.Conf.</p>
+										</div>
+										<div class="col-md-3">
+											<h4>
+												<b>Rtn. Srinath R
+													<br/>
+													Girimaji</b>
+											</h4>
+											<hr/>
+											<p>Contact : 9242407589</p>
+											<p>Secretary - Dist.Conf.</p>
+										</div>
+										<div class="col-md-3">
+											<h4>
+												<b>Rtn. M.Nagaraj</b>
+
+											</h4>
+											<br/>
+											<hr/>
+											<p>Contact : 9448403669</p>
+											<p>Chairman - Registration Committee</p>
+										</div>
+									</div>
+									<div class="row mt-4">
+										<div class="col-md-12">
+											<h2>
+												<strong>REGISTRATION FEE STRUCTURE</strong>
+											</h2>
+											<table class="table">
+												<tbody>
+													<tr style="height: 74px;">
+														<td style="height: 74px;">
+															<p>
+																<strong>Registration Type</strong>
+															</p>
+														</td>
+														<td style="height: 74px;">
+															<p>
+																<strong>Before 30th SEP 2021</strong>
+															</p>
+														</td>
+														<td style="height: 74px;">
+															<p>
+																<strong>Before 30th NOV 2021</strong>
+															</p>
+														</td>
+														<td style="height: 74px;">
+															<p>
+																<strong>Before 31st DEC 2021</strong>
+															</p>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<p>
+																<strong>ROTARIAN</strong>
+															</p>
+														</td>
+														<td>
+															<p>
+																<strong>₹3600</strong>
+															</p>
+														</td>
+														<td>
+															<p>
+																<strong>₹3800</strong>
+															</p>
+														</td>
+														<td>
+															<p>
+																<strong>₹4000</strong>
+															</p>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<p>
+																<strong>ANN/ INNER WHEEL / ROTARACTORS</strong>
+															</p>
+														</td>
+														<td>
+															<p>
+																<strong>₹3100</strong>
+															</p>
+														</td>
+														<td>
+															<p>
+																<strong>₹3300</strong>
+															</p>
+														</td>
+														<td>
+															<p>
+																<strong>₹3500</strong>
+															</p>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<p>
+																<strong>ANNET</strong>
+															</p>
+														</td>
+														<td>
+															<p>
+																<strong>₹2500</strong>
+															</p>
+														</td>
+														<td>
+															<p>₹2700</p>
+														</td>
+														<td>
+															<p>₹2900</p>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<p>
+																<strong>GUEST</strong>
+															</p>
+														</td>
+														<td>
+															<p>₹3900</p>
+														</td>
+														<td>
+															<p>₹4200</p>
+														</td>
+														<td>
+															<p>
+																<strong>₹4500</strong>
+															</p>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<p>
+																<strong>COUPLE</strong>
+															</p>
+														</td>
+														<td>
+															<p>₹6200</p>
+														</td>
+														<td>
+															<p>₹6700</p>
+														</td>
+														<td>
+															<p>
+																<strong>₹7200</strong>
+															</p>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+
+
 								</div>
-								<div class="row mt-4">
-									<div class="col-md-12">
-										<h2>
-											<strong>REGISTRATION FEE STRUCTURE</strong>
-										</h2>
-										<table class="table">
-											<tbody>
-												<tr style="height: 74px;">
-													<td style="height: 74px;">
-														<p>
-															<strong>Registration Type</strong>
-														</p>
-													</td>
-													<td style="height: 74px;">
-														<p>
-															<strong>Before 30th SEP 2021</strong>
-														</p>
-													</td>
-													<td style="height: 74px;">
-														<p>
-															<strong>Before 30th NOV 2021</strong>
-														</p>
-													</td>
-													<td style="height: 74px;">
-														<p>
-															<strong>Before 31st DEC 2021</strong>
-														</p>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<p>
-															<strong>ROTARIAN</strong>
-														</p>
-													</td>
-													<td>
-														<p>
-															<strong>₹3600</strong>
-														</p>
-													</td>
-													<td>
-														<p>
-															<strong>₹3800</strong>
-														</p>
-													</td>
-													<td>
-														<p>
-															<strong>₹4000</strong>
-														</p>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<p>
-															<strong>ANN/ INNER WHEEL / ROTARACTORS</strong>
-														</p>
-													</td>
-													<td>
-														<p>
-															<strong>₹3100</strong>
-														</p>
-													</td>
-													<td>
-														<p>
-															<strong>₹3300</strong>
-														</p>
-													</td>
-													<td>
-														<p>
-															<strong>₹3500</strong>
-														</p>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<p>
-															<strong>ANNET</strong>
-														</p>
-													</td>
-													<td>
-														<p>
-															<strong>₹2500</strong>
-														</p>
-													</td>
-													<td>
-														<p>₹2700</p>
-													</td>
-													<td>
-														<p>₹2900</p>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<p>
-															<strong>GUEST</strong>
-														</p>
-													</td>
-													<td>
-														<p>₹3900</p>
-													</td>
-													<td>
-														<p>₹4200</p>
-													</td>
-													<td>
-														<p>
-															<strong>₹4500</strong>
-														</p>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<p>
-															<strong>COUPLE</strong>
-														</p>
-													</td>
-													<td>
-														<p>₹6200</p>
-													</td>
-													<td>
-														<p>₹6700</p>
-													</td>
-													<td>
-														<p>
-															<strong>₹7200</strong>
-														</p>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
+								<div class="col-md-12 text-center mt-5">
+									<img src="/bank.jpeg?" style="width: 400px;">
 								</div>
-
-
 							</div>
-							<div class="col-md-12 text-center mt-5">
-								<img src="/bank.jpeg?" style="width: 400px;">
+							<div class="col-12 mt-5">
+								<button type="submit" class="btn btn-primary btn-lg float-right w-100">Register</button>
 							</div>
-						</div>
-						<div class="col-12 mt-5">
-							<button type="submit" class="btn btn-primary btn-lg float-right w-100">Register</button>
-						</div>
 
-					</div>
-				</form>
-			{% endverbatim %}
-		</div>
-	</main>
-
-	{% if page.footer %}
-		<footer class="mt-auto {{ footer_classes }}">
-			<div class="{{ b4_top_container }}">
-				{{ page.footer }}
+						</div>
+					</form>
+				{% endverbatim %}
 			</div>
-		</footer>
-	{% endif %}
-</div>
+		</main>
+
+		{% if page.footer %}
+			<footer class="mt-auto {{ footer_classes }}">
+				<div class="{{ b4_top_container }}">
+					{{ page.footer }}
+				</div>
+			</footer>
+		{% endif %}
+	</div>
