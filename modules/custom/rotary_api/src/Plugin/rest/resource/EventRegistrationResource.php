@@ -55,7 +55,8 @@ class EventRegistrationResource extends ResourceBase
     public function post($payload)
     {   
         $registrationType = \Drupal::request()->query->get('registrationtype');
-        if($registrationType=="single")
+        
+        if($registrationType=="single" || $registrationType==null)
         return $this->singleRegistration($payload);
         else if($registrationType=="multiple")
         return $this->multipleRegistration($payload);
