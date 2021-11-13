@@ -22,6 +22,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class EventRegistrationResource extends ResourceBase
 {
+    public $zone;
+    public $club;
+    public $paymentMode;
 
     /**
      * A current user instance.
@@ -54,12 +57,20 @@ class EventRegistrationResource extends ResourceBase
      */
     public function post($payload)
     {   
+        
         $registrationType = \Drupal::request()->query->get('registrationtype');
         
         if($registrationType=="single" || $registrationType==null)
         return $this->singleRegistration($payload);
         else if($registrationType=="multiple")
-        return $this->multipleRegistration($payload);
+        {
+            $this->club = $payload["club"];
+            $this->zone = $payload["zone"];
+            $this->paymentMode = $payload["paymentMode"];
+            $registrations = $payload["registrations"];
+            return $this->multipleRegistration($registrations);
+        }
+        
 
     }
 
@@ -95,10 +106,10 @@ class EventRegistrationResource extends ResourceBase
         $user->set("field_registrant_name", $payload["registrantName"]);
         $user->set("field_current_designation", $payload["currentDesignation"]);
         $user->set("field_mobile", $payload["mobile"]);
-        $user->set("field_zone", $payload["zoneId"]);
-        $user->set("field_club", $payload["clubId"]);
+        $user->set("field_zone", $this->zone);
+        $user->set("field_club", $this->club);
         $user->set("field_contact_address", $payload["contactAddress"]);
-        $user->set("field_payment_mode", $payload["paymentMode"]);
+        $user->set("field_payment_mode", $this->paymentMode);
         $user->set("field_payment_status", "PendingFinanceReview");
         $user->set("field_food_preference", $payload["foodprefs"]);
         $user->activate();
@@ -221,7 +232,7 @@ class EventRegistrationResource extends ResourceBase
 
     public function getUserName($mobile){
         $db = \Drupal::database();
-        $query = " select name,created as uname from users_field_data as u right join user__field_mobile as um on um.entity_id  = u .uid where um.field_mobile_value = '$mobile' order by created desc";
+        $query = " select name,created as uname from users_field_data as u right join user__field_mobile as um on um.entity_id  = u .uid where um.field_mobile_value = '$mobile' order by created desc,name desc";
         $result = $db->query($query);
         try{
             $result = $result->fetchAll();
@@ -233,7 +244,6 @@ class EventRegistrationResource extends ResourceBase
         if($val == null) {
             return $mobile;
         }
-       
         $prefix = $this->addPrefix($val);
         return $mobile."_".$prefix;
     }

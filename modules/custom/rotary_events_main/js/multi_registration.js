@@ -8,6 +8,9 @@ var app = new Vue({
   data: function () {
     return {
       formData: [],
+      paymentMode:null,
+      club:null,
+      zone:null,
       zones: [],
       clubs: [],
       registrationTypes: [],
@@ -24,6 +27,7 @@ var app = new Vue({
     this.loadZones();
     this.loadRegistrationTypes();
   },
+  
   methods: {
     loadZones: async function () {
       var response = await vueAxios.get("/api/list/zones?_format=json");
@@ -35,6 +39,9 @@ var app = new Vue({
       user.uuid = this.uuidv4()
       this.formData.push(user)
     },
+    removeUser: function(index){
+      this.$delete(this.formData, index)
+    },
     uuidv4: function() {
       return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
         (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
@@ -42,7 +49,7 @@ var app = new Vue({
     },
     loadClubs: async function (event) {
       var response = await vueAxios.get(
-        `/api/list/clubs/${this.formData.zoneId}?_format=json`
+        `/api/list/clubs/${this.zone}?_format=json`
       );
       this.clubs = response.data;
     },
@@ -50,19 +57,24 @@ var app = new Vue({
       var response = await vueAxios.get(`/api/registration-types?_format=json`);
       this.registrationTypes = response.data;
     },
-    selectRegistrationType: async function (event) {
+    selectRegistrationType: async function (registrant, event) {
       this.selectedRegistrationType = this.registrationTypes.find(
         (item) => item.tid == event.target.value
       );
-      this.formData["registrationType"] = this.selectedRegistrationType["tid"];
+      registrant["registrationType"] = this.selectedRegistrationType["tid"];
     },
     submitRegistration: function () {
       this.$validator.validate().then(async (valid) => {
         try {
           if (valid) {
+            var data = {}
+            data.zone = this.zone
+            data.club = this.club
+            data.paymentMode = this.paymentMode
+            data.registrations = this.formData
             var response = await vueAxios.post(
               `/event/registration?registrationtype=multiple`,
-              this.formData
+              data
             );
             window.location = "/members-confirmation";
           }

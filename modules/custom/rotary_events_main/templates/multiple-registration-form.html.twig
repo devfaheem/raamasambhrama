@@ -15,7 +15,7 @@
 							<div class="form-group">
 								<label for="club">Zone<span class="text-red">*</span>
 								</label>
-								<select id="zones" v-validate="'required'" name="zone" v-model="formData.zoneId" @change="loadClubs($event)" class="custom-select custom-select-sm">
+								<select id="zones" v-validate="'required'" name="zone" v-model="zone" @change="loadClubs($event)" class="custom-select custom-select-sm">
 									<option selected>Select One</option>
 									<option v-for="zone in zones" :key="zone.tid" :value="zone.tid">{{zone.name}}</option>
 								</select>
@@ -26,11 +26,25 @@
 							<div class="form-group">
 								<label for="club">Club<span class="text-red">*</span>
 								</label>
-								<select id="clubs" v-model="formData.clubId" v-validate="'required'" name="club" class="custom-select custom-select-sm">
+								<select id="clubs" v-model="club" v-validate="'required'" name="club" class="custom-select custom-select-sm">
 									<option selected>Select One</option>
 									<option v-for="club in clubs" :key="club.tid" :value="club.tid">{{club.name}}</option>
 								</select>
 								<span class="text-red">{{ errors.first('club') }}</span>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label for="club">Payment Method<span class="text-red">*</span>
+								</label>
+								<select id="club" v-validate="'required'" :name="'paymentMode'" v-model="paymentMode" class="custom-select custom-select-sm">
+									<option selected>Select One</option>
+									<option value="cheque">Cheque</option>
+									<option value="neft">Neft</option>
+									<option value="cash">Cash</option>
+									<option value="directbanktransfer">Direct Bank Transfer</option>
+								</select>
+								<span class="text-red">{{ errors.first('paymentMode') }}</span>
 							</div>
 						</div>
 						<div class="col-12 text-right">
@@ -45,10 +59,10 @@
 										<th>Full Name</th>
 										<th>Registration Type</th>
 										<th>Mobile</th>
-										<th>Payment Method</th>
 										<th>Current Designation(Member, President, Secretary, Etc)</th>
 										<th>Food Preference</th>
 										<th>Contact Address</th>
+										<th></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -67,16 +81,6 @@
 										<td><input type="text" v-validate="'required'" :name="'mobile'+index" v-model="registrant.mobile" class="form-control " placeholder="">
 											<span class="text-red">{{ errors.first('mobile'+index) }}</span>
 										</td>
-										<td>
-											<select id="club" v-validate="'required'" :name="'paymentMode'+index" v-model="registrant.paymentMode" class="custom-select custom-select-sm">
-												<option selected>Select One</option>
-												<option value="cheque">Cheque</option>
-												<option value="neft">Neft</option>
-												<option value="cash">Cash</option>
-												<option value="directbanktransfer">Direct Bank Transfer</option>
-											</select>
-											<span class="text-red">{{ errors.first('paymentMode') }}</span>
-										</td>
 										<td><input type="text" v-validate="'required'" :name="'currentDesignation'+index" v-model="registrant.currentDesignation" class="form-control " placeholder="">
 											<span class="text-red">{{ errors.first('currentDesignation'+index) }}</span>
 										</td>
@@ -89,8 +93,10 @@
 											<span class="text-red">{{ errors.first('foodprefs'+index) }}</span>
 										</td>
 										<td>
-											<textarea type="text" v-validate="'required'" :name="'contactAddress'+index" v-model="registrant.contactAddress" class="form-control " placeholder=""></textarea>
-											<span class="text-red">{{ errors.first('contactAddress'+index) }}</span>
+											<textarea type="text"  :name="'contactAddress'+index" v-model="registrant.contactAddress" class="form-control " placeholder=""></textarea>
+										</td>
+										<td>
+											<button class="btn btn-small" type="button" @click="removeUser(index)">delete</button>
 										</td>
 									</tr>
 
