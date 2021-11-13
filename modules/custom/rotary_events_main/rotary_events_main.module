@@ -1,4 +1,5 @@
 <?php
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * @file
@@ -71,4 +72,13 @@ function rotary_events_main_theme()
          ]
         ]
     ];
+}
+
+function rotary_events_main_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'user_login_form') {
+      $form["name"]["#title"] = "Login ID";
+      $form["name"]["#description"] = "Enter your login ID provided in SMS.";
+       $form["pass"]["#title"] = "Pincode";
+      $form["pass"]["#description"] = "Enter the pin provided in your SMS.";
+  }
 }
