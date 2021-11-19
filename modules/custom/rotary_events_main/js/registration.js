@@ -20,8 +20,11 @@ var app = new Vue({
         contactAddress: "",
         currentDesignation: "",
         totalAmount: "",
+        foodprefs: "",
         dependants: [],
       },
+      utrnumber:null,
+      bankRecipetImage:null,
       zones: [],
       clubs: [],
       registrationTypes: [],
@@ -30,11 +33,33 @@ var app = new Vue({
     };
   },
   mounted() {
+    this.initReCaptcha();
     this.loadCsrfToken();
     this.loadZones();
     this.loadRegistrationTypes();
   },
   methods: {
+    initReCaptcha: function() {
+      var self = this;
+      setTimeout(function() {
+          if(typeof grecaptcha === 'undefined') {
+              self.initReCaptcha();
+          }
+          else {
+              grecaptcha.render('recaptcha', {
+                  sitekey: '6LeSgUUdAAAAAClz1GqCJ6Ms-G4y3Jgvl35K3fAO',
+                  size: 'invisible',
+                  badge: 'inline',
+                  callback: self.submitRegistration
+              });
+          }
+      }, 100);
+  },
+  validate: function() {
+      // your validations...
+      // ...
+      grecaptcha.execute();
+  },
     loadZones: async function () {
       var response = await vueAxios.get("/api/list/zones?_format=json");
       this.zones = response.data;
@@ -55,8 +80,39 @@ var app = new Vue({
       );
       this.formData["registrationType"] = this.selectedRegistrationType["tid"];
     },
-    submitRegistration: function () {
+    
+    async handleFileUpload(event) {
+      var file = event.target.files[0];
+      const  fileType = file['type'];
+      const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+      if (!validImageTypes.includes(fileType)) {
+        alert("Only image file type is allowed.")
+        this.$refs.ackUpload.value=null;
+        return;
+      }
+      if(file.size > 2097152 ){
+        alert("Max file upload size is 2MB.")
+        this.$refs.ackUpload.value=null;
+        return;
+      }
+      this.createBase64Image(file)
+      console.log(file)
+    },
+    createBase64Image(fileObject) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.bankRecipetImage = e.target.result;
+        console.log(this.bankRecipetImage)
+      }
+      reader.readAsDataURL(fileObject);
+    },
+    submitRegistration: function (token) {
       this.$validator.validate().then(async (valid) => {
+      this.formData.recaptchaToken = token;
+      this.formData.utrnumber = this.utrnumber;
+      this.formData.amount = this.selectedRegistrationType["price"]
+      if(this.bankRecipetImage!="")
+      this.formData.payment_acknowledgement = this.bankRecipetImage;
         try {
           if (valid) {
             var response = await vueAxios.post(

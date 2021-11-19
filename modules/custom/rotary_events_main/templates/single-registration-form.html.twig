@@ -6,7 +6,7 @@
 	<main role="main">
 		<div id="app" class="container">
 			{% verbatim %}
-				<form v-on:submit.prevent="submitRegistration">
+				<form v-on:submit.prevent="validate">
 					<div class="row">
 						<div class="col-12">
 							<h1 class="text-center">Welcome, To The Event Registration.</h1>
@@ -33,25 +33,29 @@
 								<span class="text-red">{{ errors.first('registrationtype') }}</span>
 							</div>
 						</div>
-						<div class="col-12" v-if="this.selectRegistrationType!=null && dependantsCount >0">
+						
+						<div class="col-12" v-if="this.formData.registrationType=='12'">
 							<div class="row" v-for="index in dependantsCount" :key="index">
 								<div class="col-6">
 									<div class="form-group">
-									<label >Ann's Full Name<span class="text-red">*</span></label>
+										<label>Ann's Full Name<span class="text-red">*</span>
+										</label>
 										<input type="text" v-validate="'required'" :name="'user2fullname'+index" key="user2fullname" v-model="formData.dependants[index-1]['fullname']" class="form-control ">
 										<span class="text-red">{{errors.first("user2fullname" + index)}}</span>
 									</div>
 								</div>
 								<div class="col-6">
 									<div class="form-group">
-									<label >Ann's Mobile<span class="text-red">*</span></label>
+										<label>Ann's Mobile<span class="text-red">*</span>
+										</label>
 										<input type="text" v-validate="'required'" :name="'user2mobilenumber'+index" key="user2mobilenumber" v-model="formData.dependants[index-1]['mobilenumber']" class="form-control ">
 										<span class="text-red">{{errors.first("user2mobilenumber" + index)}}</span>
 									</div>
 								</div>
 								<div class="col-6">
 									<div class="form-group">
-									<label >Ann's Food Prefs<span class="text-red">*</span></label>
+										<label>Ann's Food Prefs<span class="text-red">*</span>
+										</label>
 										<select v-validate="'required'" :name="'user2foodprefs'+index" key="user2foodprefs" v-model="formData.dependants[index-1]['foodprefs']" class="custom-select custom-select-sm">
 											<option selected>Select One</option>
 											<option value="veg">Veg</option>
@@ -143,20 +147,42 @@
 									<h3>
 										Total Amout:
 										{{selectedRegistrationType["price"]}}
-										INR</h3>
+										INR
+									</h3>
 								</div>
 
 							</div>
 						</div>
-
-
+						<div class="row">
+						<div class="col-md-12">
 						
-							<div class="row mt-5">
+						<h3>Payment Acknowledgement</h3>
+						</div>
+							<div class="col-md-6">
+								<div class="form-group">
+										<label>Reciept Photo
+										</label>
+										<input type="file" ref="ackUpload"  accept="image/*" @change="handleFileUpload($event)" data-max-size="2048" class="form-control ">
+										<small>Upload picture from Bank Reciept, UPI transaction screenshot, NEFT or RTGS <br />
+										max upload size is 2MB.
+										 </small>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<label>UTR Number
+										</label>
+										<input type="text"  v-model="utrnumber" class="form-control ">
+										<small>Enter The UTR Number</small>
+							</div>
+						</div>
 
-								<div class="col-md-12">
-									<div class="row">
-										<div class="col-md-12 border">
-											<h1>Bank Details</h1>
+
+						<div class="row mt-5">
+
+							<div class="col-md-12">
+								<div class="row">
+									<div class="col-md-12 border">
+										<h1>Bank Details</h1>
 										<p>
 											<h4>
 												<b>Account Name: RID 3182 DISCON 2022</b>
@@ -164,33 +190,34 @@
 											<br/>
 
 											<h4>
-												<b>Current A/c No : 5107575111 <br/>
-												IFSC CODE : CBIN 0283553<br />
-												BANK: CENTRAL BANK OF INDIA, Shimoga
+												<b>Current A/c No : 5107575111
+													<br/>
+													IFSC CODE : CBIN 0283553<br/>
+													BANK: CENTRAL BANK OF INDIA, Shimoga
 												</b>
 											</h4>
 										</p>
-										</div>
 									</div>
-									<div class="row mt-4">
-										
-										<div class="col-md-3">
-											<h4>
-												<b>Rtn. M.Nagaraj</b>
+								</div>
+								<div class="row mt-4">
 
-											</h4>
-											<br/>
-											<hr/>
-											<p>Contact : 9448403669</p>
-											<p>Chairman - Registration Committee</p>
-										</div>
+									<div class="col-md-3">
+										<h4>
+											<b>Rtn. M.Nagaraj</b>
+
+										</h4>
+										<br/>
+										<hr/>
+										<p>Contact : 9448403669</p>
+										<p>Chairman - Registration Committee</p>
 									</div>
-									<div class="row mt-4">
-										<div class="col-md-12">
-											<h2>
-												<strong>REGISTRATION FEE STRUCTURE</strong>
-											</h2>
-											<table class="table">
+								</div>
+								<div class="row mt-4">
+									<div class="col-md-12">
+										<h2>
+											<strong>REGISTRATION FEE STRUCTURE</strong>
+										</h2>
+										<table class="table">
 											<tbody>
 												<tr style="height: 74px;">
 													<td style="height: 74px;">
@@ -314,30 +341,34 @@
 												</tr>
 											</tbody>
 										</table>
-										</div>
 									</div>
-
-
 								</div>
-								<div class="col-md-12 text-center mt-5">
-									<img src="/bank.jpeg?" style="width: 400px;">
-								</div>
-							</div>
-							<div class="col-12 mt-5">
-								<button type="submit" class="btn btn-primary btn-lg float-right w-100">Register</button>
-							</div>
 
+
+							</div>
+							<div class="col-md-12 text-center mt-5">
+								<img src="/bank.jpeg?" style="width: 400px;">
+							</div>
 						</div>
-					</form>
-				{% endverbatim %}
-			</div>
-		</main>
+						<div class="col-md-12 text-center my-5">
+						<div id="recaptcha" class="g-recaptcha"></div>
+						</div>
+						<div class="col-12 mt-5">
+							
+							<button type="submit" class="btn btn-primary btn-lg float-right w-100">Register</button>
+						</div>
 
-		{% if page.footer %}
-			<footer class="mt-auto {{ footer_classes }}">
-				<div class="{{ b4_top_container }}">
-					{{ page.footer }}
-				</div>
-			</footer>
-		{% endif %}
-	</div>
+					</div>
+				</form>
+			{% endverbatim %}
+		</div>
+	</main>
+
+	{% if page.footer %}
+		<footer class="mt-auto {{ footer_classes }}">
+			<div class="{{ b4_top_container }}">
+				{{ page.footer }}
+			</div>
+		</footer>
+	{% endif %}
+</div>

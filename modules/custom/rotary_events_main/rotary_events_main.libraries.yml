@@ -3,6 +3,7 @@ vue-single-registration:
     js/vue.js: {}
     js/axios.min.js: {}
     https://unpkg.com/vee-validate@<3.0.0: {external: true, minified: true}
+    https://www.google.com/recaptcha/api.js?render=6LeSgUUdAAAAAClz1GqCJ6Ms-G4y3Jgvl35K3fAO: {external: true, minified: true}
     js/registration.js: {}
 
 vue-multi-registration:
@@ -10,4 +11,5 @@ vue-multi-registration:
     js/vue.js: {}
     js/axios.min.js: {}
     https://unpkg.com/vee-validate@<3.0.0: {external: true, minified: true}
+    https://www.google.com/recaptcha/api.js?render=6LeSgUUdAAAAAClz1GqCJ6Ms-G4y3Jgvl35K3fAO: {external: true, minified: true}
     js/multi_registration.js: {}

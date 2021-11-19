@@ -6,7 +6,7 @@
 	<main role="main">
 		<div id="app" class="container">
 			{% verbatim %}
-				<form v-on:submit.prevent="submitRegistration">
+				<form v-on:submit.prevent="validate">
 					<div class="row">
 						<div class="col-12">
 							<h1 class="text-center">Welcome, To The Event Registration.</h1>
@@ -104,7 +104,9 @@
 							</table>
 							</div>
 						</div>
-
+						<div class="col-md-12 text-center my-5">
+							<div id="recaptcha" class="g-recaptcha"></div>
+						</div>
 				
 						<div class="col-12 mt-5">
 							<button type="submit" class="btn btn-primary btn-lg float-right w-100">Register</button>

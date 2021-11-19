@@ -9,6 +9,8 @@ use Drupal\rest\ResourceResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Database\Database as Database;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Drupal\node\Entity\Node;
+
 /**
  * Provides a resource to get view modes by entity and bundle.
  *
@@ -57,7 +59,10 @@ class EventRegistrationResource extends ResourceBase
      */
     public function post($payload)
     {   
-        
+        if(!isset($payload["recaptchaToken"])||!$this->verifyRecaptcha($payload["recaptchaToken"])){
+            return new ModifiedResourceResponse(["message"=>"Invalid Captcha"], 401);
+        }
+
         $registrationType = \Drupal::request()->query->get('registrationtype');
         
         if($registrationType=="single" || $registrationType==null)
@@ -70,8 +75,56 @@ class EventRegistrationResource extends ResourceBase
             $registrations = $payload["registrations"];
             return $this->multipleRegistration($registrations);
         }
-        
+    }
 
+    public function verifyRecaptcha($token){
+        $secretKey = "6LeSgUUdAAAAAPvBig1O4_Tfx2gQLxy3psEY4Y7c";
+        $url = 'https://www.google.com/recaptcha/api/siteverify';
+        $data = array('secret' => $secretKey, 'response' => $token);
+        $options = array(
+            'http' => array(
+              'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+              'method'  => 'POST',
+              'content' => http_build_query($data)
+            )
+        );
+        $context  = stream_context_create($options);
+        $response = file_get_contents($url, false, $context);
+        $responseKeys = json_decode($response,true);
+        if($responseKeys["success"]) {
+            return true;
+          } else {
+            return false;
+        }
+    }
+
+    public function createAcknowledgement($picture, $utrnumber, $userId){
+        $entityType = "payment_acknowledgement";
+        $bundleName = "default";
+        $fid = !in_array($picture,["",null])?$this->savePaymentAckPicture($picture):null;
+        $acknowlegement = entity_create($entityType, array('type' => $bundleName));
+        $acknowlegement->set("field_image_upload", $fid);
+        $acknowlegement->set("field_reference_number", $utrnumber);
+        $acknowlegement->set("uid", $userId);
+        $acknowlegement->save();
+        $user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
+        $user->set("field_payment_status", "PendingFinanceReview");
+        $user->save();
+        
+    }
+
+    public function savePaymentAckPicture($picture){
+        $base64Image = $picture;
+        $base64Image = trim($base64Image);
+        $base64Image = str_replace('data:image/png;base64,', '', $base64Image);
+        $base64Image = str_replace('data:image/jpg;base64,', '', $base64Image);
+        $base64Image = str_replace('data:image/jpeg;base64,', '', $base64Image);
+        $base64Image = str_replace('data:image/gif;base64,', '', $base64Image);
+        $extension = explode('/', mime_content_type($picture))[1];
+        $base64DecodedFile = base64_decode($base64Image);
+        $path ='public://'.uniqid().".".$extension;
+        $file = file_save_data($base64DecodedFile, $path, FILE_EXISTS_RENAME);
+        return $file->id();
     }
 
     public function multipleRegistration($users){
@@ -119,6 +172,7 @@ class EventRegistrationResource extends ResourceBase
     }
 
     public function singleRegistration($payload){
+        $ackSubmitted = !in_array($payload["payment_acknowledgement"], ["",null]) || !in_array($payload["utrnumber"], ["",null]);
         $userName = $this->getUserName($payload["mobile"]);
         $pincode = random_int(100000, 999999);
         $registrationType = $payload["registrationType"];        
@@ -139,8 +193,9 @@ class EventRegistrationResource extends ResourceBase
         $user->set("field_club", $payload["clubId"]);
         $user->set("field_contact_address", $payload["contactAddress"]);
         $user->set("field_payment_mode", $payload["paymentMode"]);
-        $user->set("field_payment_status", "InformationSubmitted");
+        $user->set("field_payment_status", $ackSubmitted?"PendingFinanceReview":"InformationSubmitted");
         $user->set("field_food_preference", $payload["foodprefs"]);
+        $user->set("field_amount", $payload["amount"]);
         $user->activate();
 
         // Couple Registration
@@ -168,23 +223,26 @@ class EventRegistrationResource extends ResourceBase
             $user2->set("field_club", $payload["clubId"]);
             $user2->set("field_contact_address", $payload["contactAddress"]);
             $user2->set("field_payment_mode", $payload["paymentMode"]);
-            $user2->set("field_payment_status", "InformationSubmitted");
+            $user2->set("field_payment_status", $ackSubmitted?"PendingFinanceReview":"InformationSubmitted");
             $user2->set("field_food_preference", $ann["foodprefs"]);
+            $user2->set("field_amount", $payload["amount"]);
             $user2->activate();
         }
         
-
-        $user->field_dependants = $this->getDependants($payload);
-        $result = [];
         try {
-            $result = $user->save();
+            $user->save();
             $this->generateDeliverables($user->id(),$payload["zoneId"],$payload["clubId"]);
+            $this->sendSmsNotification($userName,$payload["mobile"],$pincode);
             if($user2!=null){
                 $result2 = $user2->save();
                 $this->generateDeliverables($user2->id(),$payload["zoneId"],$payload["clubId"]);
-                $this->sendSmsNotification($annUserName,$ann["mobilenumber"],$annsPincode);
+                $this->sendSmsNotification($annUserName,$ann["mobilenumber"],$annsPincode);    
             }
-            $this->sendSmsNotification($userName,$payload["mobile"],$pincode);
+            if($ackSubmitted){
+                $this->createAcknowledgement($payload["payment_acknowledgement"],$payload["utrnumber"],$user->id());
+                if($user2!=null)
+                $this->createAcknowledgement($payload["payment_acknowledgement"],$payload["utrnumber"],$user2->id());
+            }
             return new ModifiedResourceResponse(["message"=>"Registered Successfully"], 200);
         } catch (\Drupal\Core\Entity\EntityStorageException $exception) {
             return new ModifiedResourceResponse(["error" => str_contains($exception->getMessage(),"1062 Duplicate entry")?"Mobile number already registered.":$exception->getMessage()], 422);

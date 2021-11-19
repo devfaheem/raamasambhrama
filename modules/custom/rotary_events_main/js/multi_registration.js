@@ -26,9 +26,31 @@ var app = new Vue({
     this.loadCsrfToken();
     this.loadZones();
     this.loadRegistrationTypes();
+    this.initReCaptcha();
   },
   
   methods: {
+    initReCaptcha: function() {
+      var self = this;
+      setTimeout(function() {
+          if(typeof grecaptcha === 'undefined') {
+              self.initReCaptcha();
+          }
+          else {
+              grecaptcha.render('recaptcha', {
+                  sitekey: '6LeSgUUdAAAAAClz1GqCJ6Ms-G4y3Jgvl35K3fAO',
+                  size: 'invisible',
+                  badge: 'inline',
+                  callback: self.submitRegistration
+              });
+          }
+      }, 100);
+  },
+  validate: function() {
+      // your validations...
+      // ...
+      grecaptcha.execute();
+  },
     loadZones: async function () {
       var response = await vueAxios.get("/api/list/zones?_format=json");
       this.zones = response.data;
@@ -63,8 +85,9 @@ var app = new Vue({
       );
       registrant["registrationType"] = this.selectedRegistrationType["tid"];
     },
-    submitRegistration: function () {
+    submitRegistration: function (token) {
       this.$validator.validate().then(async (valid) => {
+        
         try {
           if (valid) {
             var data = {}
@@ -72,6 +95,7 @@ var app = new Vue({
             data.club = this.club
             data.paymentMode = this.paymentMode
             data.registrations = this.formData
+            data.recaptchaToken = token;
             var response = await vueAxios.post(
               `/event/registration?registrationtype=multiple`,
               data
