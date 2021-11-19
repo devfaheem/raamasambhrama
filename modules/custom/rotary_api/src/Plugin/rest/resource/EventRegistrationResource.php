@@ -122,7 +122,7 @@ class EventRegistrationResource extends ResourceBase
         $base64Image = str_replace('data:image/gif;base64,', '', $base64Image);
         $extension = explode('/', mime_content_type($picture))[1];
         $base64DecodedFile = base64_decode($base64Image);
-        $path ='public://'.uniqid().".".$extension;
+        $path ='public://acknowledgements/'.uniqid().".".$extension;
         $file = file_save_data($base64DecodedFile, $path, FILE_EXISTS_RENAME);
         return $file->id();
     }
