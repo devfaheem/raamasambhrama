@@ -26,7 +26,7 @@ var app = new Vue({
     this.loadCsrfToken();
     this.loadZones();
     this.loadRegistrationTypes();
-    this.initReCaptcha();
+    // this.initReCaptcha();
   },
   
   methods: {

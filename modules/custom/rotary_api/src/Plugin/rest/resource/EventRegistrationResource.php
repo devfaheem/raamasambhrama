@@ -59,9 +59,9 @@ class EventRegistrationResource extends ResourceBase
      */
     public function post($payload)
     {   
-        if(!isset($payload["recaptchaToken"])||!$this->verifyRecaptcha($payload["recaptchaToken"])){
-            return new ModifiedResourceResponse(["message"=>"Invalid Captcha"], 401);
-        }
+        // if(!isset($payload["recaptchaToken"])||!$this->verifyRecaptcha($payload["recaptchaToken"])){
+        //     return new ModifiedResourceResponse(["message"=>"Invalid Captcha"], 401);
+        // }
 
         $registrationType = \Drupal::request()->query->get('registrationtype');
         

@@ -33,7 +33,7 @@ var app = new Vue({
     };
   },
   mounted() {
-    this.initReCaptcha();
+    // this.initReCaptcha();
     this.loadCsrfToken();
     this.loadZones();
     this.loadRegistrationTypes();
