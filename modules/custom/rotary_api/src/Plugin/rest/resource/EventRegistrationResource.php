@@ -251,15 +251,26 @@ class EventRegistrationResource extends ResourceBase
 
     public function sendSmsNotification($username, $mobile, $pincode)
     {
+         if(substr($mobile, 0, 2) == "91"){
+            $mobile = '+' . $mobile;
+         }
+         else {
+            $mobile = '+91' . $mobile;
+         }
+
         $textLocal = new \Drupal\rotary_api\Controller\TextLocalProvider('usha.cs@sahyadri.edu.in', 'Aptra2017', false);
-        $numbers = array('+91' . $mobile);
+        $numbers = array($mobile);
         $sender = 'APTTCH';
-        $message = "Dear Member, Please note your credentials UserName: $username and Pincode: $pincode. Thank you. APTTCH";
+        $message = "Dear Member, You have successfully registered with DISCON 22. rotary3182events.org. APTTCH Team Rama Sambhrama, Thank you.";
+        $message2 = "Dear Member, You have successfully registered with DISCON 22. rotary3182events.org. Your login id $username and Password $pincode.APTTCH Rotary3182 Thank You.";
+        // $message = "Dear Member, Your login id: ewrwrwe and password: ewrwe. You can now login to our website rotary3182events.org. Team Rama Sambhrama, Thank you. APTTCH";
+        // $message = "Dear Member, Please note your credentials UserName: $username and Pincode: $pincode. Thank you. APTTCH";
         // $message = "Dear Member, Please note your credentials UserName: " . "UserName: $username" . ' ' . "Pincode: $pincode" . " Thank You.";
         try {
-            $result = $textLocal->sendSms($numbers, $message, $sender); } catch (\Exception $e) {
-            die('Error1: ' . $e->getMessage());
-        } catch (\Exception $e) {
+            $result = $textLocal->sendSms($numbers, $message, $sender); 
+            $result = $textLocal->sendSms($numbers, $message2, $sender); 
+        } 
+        catch (\Exception $e) {
             die('Error1: ' . $e->getMessage());
         }
     }
