@@ -1,0 +1,41 @@
+<div
+  class="
+    news-block
+    wow
+    fadeInRight
+    animated animated
+  "
+  style="visibility: visible; animation-name: fadeInRight"
+>
+  <div class="inner-box">
+    <div class="image-box">
+      <figure class="image">
+        <a href="/node/650"
+          ><img
+            alt=""
+            class="home-tile-image"
+            src="{{ 
+                node.field_display_image.entity.fileuri==""
+                ?"/sites/default/files/styles/thumbnail/public/default_images/default-thumbnail_7.jpg"
+                :file_url(node.field_display_image.entity.fileuri) }}"
+            width="370"
+        /></a>
+      </figure>
+    </div>
+
+    <div class="lower-content">
+      <h4 class="mb-0">{{node.title.value}}</h4>
+      <ul class="post-info">
+      {% if node.field_sub_title_2.value == "" %}
+        <li>{{node.field_sub_title_2.value}}</li>
+      {% endif %}
+        <li>{{node.field_phone.value}}, Distance: {{node.field_distance.value}}</li>
+        <li><a href="{{node.field_website.value}}">{{node.field_website.value}}</a></li>
+      </ul>
+
+      <div class="btn-box">
+        {{node.body.value|raw}}  
+      </div>
+    </div>
+  </div>
+</div>
