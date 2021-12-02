@@ -41,6 +41,10 @@
     $('.mobile-menu .menu-backdrop,.mobile-menu .close-btn').on('click', function () {
       $('body').removeClass('mobile-menu-visible');
     });
+
+    $('.mobile-menu .navigation li').on('click', function () {
+      $('body').removeClass('mobile-menu-visible');
+    });
   }
 
   //Shedule Block
