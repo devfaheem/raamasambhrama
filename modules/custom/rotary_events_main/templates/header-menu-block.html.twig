@@ -54,14 +54,7 @@
 	<li><a href="/#team">Team</a></li>
 	<li><a href="/sites/rotary-drupal.dd/files/2021-04/Raama-Sambrama-Dist-Conf-Offline.pdf" target="_blank">Offline Registration</a></li>
 	<li class="d-none d-sm-block d-md-none"><a href="/3182event/registration" target="_blank">Online Registration</a></li>
-	<li class="d-md-none">
-	 {% if isLoggedIn %}
-	 <a href="/user/logout">Logout</a>
-	 {% else %}
-	 <a href="/user/login">Login</a>
-	 {% endif %}
-	</li>
-	 {% if isLoggedIn %}
+	{% if isLoggedIn %}
 	 <li>
 		{% if status == 'InformationSubmitted' %}
 		<a href="/admin/content/payment_acknowledgement/add/default">Qr Codes</a>
@@ -72,6 +65,14 @@
 		{% endif %}
 	</li>
 	 {% endif %}
+	<li class="d-md-none">
+	 {% if isLoggedIn %}
+	 <a href="/user/logout">Logout</a>
+	 {% else %}
+	 <a href="/user/login">Login</a>
+	 {% endif %}
+	</li>
+	 
 </ul>
 </div>
 </nav>
