@@ -27,17 +27,25 @@ function rotary_events_main_help($route_name, RouteMatchInterface $route_match)
     }
 }
 
-function rotary_events_main_preprocess_page(&$variables, $hook)
-{
-
-    if (in_array("registrant", \Drupal::currentUser()->getRoles()) && \Drupal::request()->getRequestUri() != "/admin/content/payment_acknowledgement/add/default") {
+function rotary_events_main_user_login(\Drupal\user\UserInterface $account) {
+  if (in_array("registrant", \Drupal::currentUser()->getRoles())) {
         $account = User::load(\Drupal::currentUser()->id());
-        if (($account->get("field_payment_status")->value == "InformationSubmitted")) {
+        if ($account->get("field_payment_status")->value == "InformationSubmitted") {
             $response = new RedirectResponse("/admin/content/payment_acknowledgement/add/default");
+            $response->send();
+        }
+        else if($account->get("field_payment_status")->value == "PendingFinanceReview"){
+            $response = new RedirectResponse("/waiting-for-review");
+            $response->send();
+        }
+        else if($account->get("field_payment_status")->value == "ConfirmedRegistration") {
+            $response = new RedirectResponse("/qr-codes");
             $response->send();
         }
     }
 }
+
+
 
 function rotary_events_main_payment_acknowledgement_insert(\Drupal\Core\Entity\EntityInterface $acknowledgement){
     if(in_array("registrant", \Drupal::currentUser()->getRoles()))
@@ -70,7 +78,15 @@ function rotary_events_main_theme()
         'template'=>'multiple-registration-form',
         'variables'=>[
          ]
-        ]
+        ],
+        'header_menu_block' => [
+      'variables' => [
+        'content' => NULL,
+        'isLoggedIn'=>NULL,
+        'status'=>NULL,
+      ],
+      'render element' => 'children',
+    ],
     ];
 }
 

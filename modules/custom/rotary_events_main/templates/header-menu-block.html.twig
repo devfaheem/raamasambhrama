@@ -1,0 +1,111 @@
+<style>
+.main-menu .navigation > li{
+	margin-left:27px
+}
+</style>
+
+<!-- Header Top Two -->
+<div class="header-top-two">
+<div class="auto-container">
+<div class="clearfix"><!--Top Left-->
+<div class="top-left clearfix">
+<ul class="links clearfix">
+	<li><a href="#">Call : 1-000-000-0000</a></li>
+	<li><a href="#">info@bootstrap_rotary.com</a></li>
+	<li><a href="#">Welcome to the bootstrap_rotary conference</a></li>
+</ul>
+</div>
+<!--Top Right-->
+
+<div class="top-right clearfix">
+<ul class="social-icons">
+	<li>&nbsp;</li>
+	<li>&nbsp;</li>
+	<li>&nbsp;</li>
+	<li>&nbsp;</li>
+	<li>&nbsp;</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- Header Top End -->
+
+<div class="main-box">
+<div class="auto-container clearfix">
+<div class="logo-box">
+<div class="logo"><a href="/"><img alt="" src="/themes/custom/rotary_bootstrap/images/logo.png" title="" /></a></div>
+</div>
+<!--Nav Box-->
+
+<div class="nav-outer clearfix"><!--Mobile Navigation Toggler-->
+<div class="mobile-nav-toggler"><svg height="50" style=" fill:#000000;" viewbox="0 0 172 172" width="50" x="0px" xmlns="http://www.w3.org/2000/svg" y="0px"><g fill="none" fill-rule="nonzero" font-family="none" font-size="none" font-weight="none" stroke="none" stroke-dasharray="" stroke-dashoffset="0" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-width="1" style="mix-blend-mode: normal" text-anchor="none"><path d="M0,172v-172h172v172z" fill="none"></path><g fill="#000000"><path d="M0,25.8v17.2h172v-17.2zM0,77.4v17.2h172v-17.2zM0,129v17.2h172v-17.2z"></path></g></g></svg></div>
+<!-- Main Menu -->
+
+<nav class="main-menu navbar-expand-md navbar-light">
+<div class="navbar-header"><!-- Togg le Button --><button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarSupportedContent" data-toggle="collapse" type="button"></button></div>
+
+<div class="collapse navbar-collapse clearfix" id="navbarSupportedContent">
+<ul class="navigation clearfix">
+	<li><a href="/">Home</a></li>
+	<li><a href="/#venue-details">Venue</a></li>
+	<li><a href="/#accommodation">Hotels</a></li>
+	<li><a href="/#places-around">Places</a></li>
+	<li><a href="/#team">Team</a></li>
+	<li><a href="/sites/rotary-drupal.dd/files/2021-04/Raama-Sambrama-Dist-Conf-Offline.pdf" target="_blank">Offline Registration</a></li>
+	<li class="d-none d-sm-block d-md-none"><a href="/3182event/registration" target="_blank">Online Registration</a></li>
+	<li class="d-md-none">
+	 {% if isLoggedIn %}
+	 <a href="/user/logout">Logout</a>
+	 {% else %}
+	 <a href="/user/login">Login</a>
+	 {% endif %}
+	</li>
+	 {% if isLoggedIn %}
+	 <li>
+		{% if status == 'InformationSubmitted' %}
+		<a href="/admin/content/payment_acknowledgement/add/default">Qr Codes</a>
+		{% elseif status == 'PendingFinanceReview' %}
+		<a href="/waiting-for-review">Qr Codes</a>
+		{% elseif status == 'ConfirmedRegistration' %}
+		<a href="/qr-codes">Qr Codes</a>
+		{% endif %}
+	</li>
+	 {% endif %}
+</ul>
+</div>
+</nav>
+<!-- Main Menu End--><!-- Outer box -->
+
+<div class="outer-box"><!--Search Box-->
+<div class="search-box-btn">&nbsp;</div>
+<!-- Button Box -->
+
+{% if isLoggedIn %}
+<div class="btn-box"><a class="theme-btn btn-style-two" href="/user/logout"><span class="btn-title">Logout</span></a></div>
+{% else %}
+<div class="btn-box"><a class="theme-btn btn-style-two" href="/user/login"><span class="btn-title">Login</span></a></div>
+{% endif %}
+
+
+<div class="btn-box"><a class="theme-btn btn-style-one" href="/3182event/registration"><span class="btn-title">Register</span></a></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Mobile Menu  -->
+
+<div class="mobile-menu">
+<div class="menu-backdrop">&nbsp;</div>
+
+<div class="close-btn">&nbsp;</div>
+<!--Here Menu Will Come Automatically Via Javascript / Same Menu as in Header-->
+
+<nav class="menu-box">
+<div class="nav-logo">&nbsp;</div>
+
+<ul class="navigation clearfix"><!--Keep This Empty / Menu will come through Javascript-->
+</ul>
+</nav>
+</div>
+<!-- End Mobile Menu -->
