@@ -26,6 +26,7 @@ public function create($payload)
     $user->set("field_payment_mode", $payload["paymentMode"]);
     $user->set("field_payment_status", "ConfirmedRegistration");
     $user->set("field_food_preference", $payload["foodprefs"]);
+    $user->set("field_amount", $payload["amount"]);
     $user->activate();
     try {
         $result = $user->save();
@@ -62,18 +63,32 @@ public function generateDeliverable($userId, $zoneId, $clubId, $deliverableId){
     $entity->save();
 }
 
+
+
 public function getUserName($mobile){
     $db = \Drupal::database();
-    $result = $db->query(" select max(name) as uname from users_field_data as u right join user__field_mobile as um on um.entity_id  = u .uid where um.field_mobile_value = '$mobile'");
-    $val = $result->fetchField();
+    $query = " select name,created as uname from users_field_data as u right join user__field_mobile as um on um.entity_id  = u .uid where um.field_mobile_value = '$mobile' order by created desc,name desc";
+    $result = $db->query($query);
+    try{
+        $result = $result->fetchAll();
+        $val = $result[0]->name;
+    }
+    catch(\Exception $e){
+        return $mobile;
+    }
     if($val == null) {
         return $mobile;
     }
-    if(substr($val, -2)=="_")
-    $prefix = substr($val, -1)+1;
-    else
-    $prefix = 1;
+    $prefix = $this->addPrefix($val);
     return $mobile."_".$prefix;
+}
+
+public function addPrefix($username){
+    if(substr($username, -2,-1) == "_")
+    $prefix = substr($username, -1)+1;
+    else
+    $prefix = substr($username, -2)+1;
+    return $prefix;
 }
 
 public function gerRecieptNumber(){

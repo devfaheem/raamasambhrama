@@ -2,7 +2,7 @@
 require 'create_user_class.php';
 use Drupal\rest\ModifiedResourceResponse;
 
-$inputFileName  = "rotary_users_data.xlsx";
+$inputFileName  = "rotary_users_data_20_11_2021.xlsx";
 $inputFileType = 'Xlsx';
 /**  Create a new Reader of the type defined in $inputFileType  **/
 $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($inputFileType);
@@ -13,6 +13,9 @@ $rows = $worksheet->toArray();
 $data = [];
 $createScript = new CreateUserScript();
 foreach($rows as $registrant) {
+   
+    if($registrant[6] == null)
+    continue;
     $payload = [];
     $payload["reciept_id"] = $registrant[1];
     $payload["registrationType"] = getRegistrationType($registrant[5]);
@@ -24,20 +27,20 @@ foreach($rows as $registrant) {
     $payload["contactAddress"] = "Not Available";
     $payload["paymentMode"] = "directbanktransfer";
     $payload["foodprefs"] = getFoodPrefs($registrant[11]);
+    $payload["amount"] = $registrant[8];
 
     $data[]=$payload;
     $createScript->create($payload);
 };
-
-var_dump($data[1]);
 
 
 function getFoodPrefs($val){
     if($val == "Non Veg"){
         return "nonveg";
     }else if ($val == "Veg"){
-        return "vag";
+        return "veg";
     }
+    echo "FoodPrefs: ".$val." end \n";
     return $val;
 }
 
@@ -49,6 +52,7 @@ function getRegistrationType($val){
                         break;
         case "Annet" : return "11";
                         break;
+        echo "RegType: ".$val;
         default: return $val;
     }
 }
@@ -58,10 +62,12 @@ function getDesignation($val){
     switch($val){
         case "Ann" : return "Ann";
                         break;
-        case "Rtn" : return "9";
+        case "Rtn" : return "Rotarian";
                         break;
-        case "Annet" : return "11";
+        case "Annet" : return "Annet";
                         break;
+                        
+        echo "Designation: ".$val;
         default: return $val;
     }
 }

@@ -62,7 +62,8 @@ class EventRegistrationResource extends ResourceBase
         // if(!isset($payload["recaptchaToken"])||!$this->verifyRecaptcha($payload["recaptchaToken"])){
         //     return new ModifiedResourceResponse(["message"=>"Invalid Captcha"], 401);
         // }
-
+        // $result =  $this->sendSmsNotification("9902233232_5","9902233232","123456");
+        // var_dump($result);die();
         $registrationType = \Drupal::request()->query->get('registrationtype');
         
         if($registrationType=="single" || $registrationType==null)
