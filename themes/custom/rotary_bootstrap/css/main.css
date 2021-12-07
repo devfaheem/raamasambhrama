@@ -47,3 +47,7 @@ body {
 .banner-conference-two{
   padding: 94px 0px 1px !important;
 }
+
+.alert-error a{
+  display:none
+}

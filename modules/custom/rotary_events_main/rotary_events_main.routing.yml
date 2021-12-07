@@ -31,3 +31,11 @@ rotary_events_main.reset_pincode:
     _title: "Profaligner - Get Case Versions"
   requirements:
     _access: "TRUE"
+
+rotary_events_main.reset_password_form:
+  path: '/form/reset_password'
+  defaults:
+    _form: '\Drupal\rotary_events_main\Form\ResetPasswordForm'
+    _title: 'ResetPasswordForm'
+  requirements:
+    _access: 'TRUE'

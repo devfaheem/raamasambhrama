@@ -94,7 +94,17 @@ function rotary_events_main_form_alter(&$form, FormStateInterface $form_state, $
   if ($form_id == 'user_login_form') {
       $form["name"]["#title"] = "Login ID";
       $form["name"]["#description"] = "Enter your login ID provided in SMS.";
-       $form["pass"]["#title"] = "Pincode";
-      $form["pass"]["#description"] = "Enter the pin provided in your SMS.";
+       $form["pass"]["#title"] = "Password";
+      $form["pass"]["#description"] = "Enter the password provided in your SMS.";
+      $form['forgot_password'] = [
+        '#type' => 'link',
+        '#title' => t('Forgot Password'),
+        '#weight' => 96,
+    ];
+    $form["actions"]["reset_password"] = array(
+      '#markup' => '<a href="/form/reset_password" class="btn btn-warning">Forgot Password</a>',
+      '#weight' => 100,
+    );
+    //    \Drupal::logger('my_module')->notice('<pre><code>' . print_r($form, TRUE) . '</code></pre>');
   }
 }
