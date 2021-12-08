@@ -57,9 +57,9 @@
 	{% if isLoggedIn %}
 	 <li>
 		{% if status == 'InformationSubmitted' %}
-		<a href="/admin/content/payment_acknowledgement/add/default">Qr Codes</a>
+		<a href="/admin/content/payment_acknowledgement/add/default">ID Cards</a>
 		{% elseif status == 'PendingFinanceReview' %}
-		<a href="/waiting-for-review">Qr Codes</a>
+		<a href="/waiting-for-review">ID Cards</a>
 		{% elseif status == 'ConfirmedRegistration' %}
 		<a href="/qr-codes">ID Cards</a>
 		{% endif %}
