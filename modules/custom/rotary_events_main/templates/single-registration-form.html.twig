@@ -169,10 +169,11 @@
 								</div>
 							</div>
 							<div class="col-md-6">
-								<label>UTR Number
+								<label>UTR Number<span class="text-red">*</span>
 										</label>
-										<input type="text"  v-model="utrnumber" class="form-control ">
-										<small>Enter The UTR Number</small>
+										<input type="text"  v-validate="'required'" name="utrnumber" v-model="utrnumber" class="form-control ">
+										<span class="text-red">{{ errors.first('utrnumber') }}</span>
+										<small><br /> Enter The UTR Number</small>
 							</div>
 						</div>
 

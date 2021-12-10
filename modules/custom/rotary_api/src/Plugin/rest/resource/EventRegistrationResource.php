@@ -177,7 +177,7 @@ class EventRegistrationResource extends ResourceBase
         $userName = $this->getUserName($payload["mobile"]);
         $pincode = random_int(100000, 999999);
         $registrationType = $payload["registrationType"];        
-        $recieptId = $this->gerRecieptNumber();
+        $recieptId = null;//$this->gerRecieptNumber();
         $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
         $user = \Drupal\user\Entity\User::create();
         $user->setPassword($pincode);
