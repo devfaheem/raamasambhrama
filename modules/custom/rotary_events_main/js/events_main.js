@@ -12,6 +12,7 @@
                     var club = data[index]
                     clubsDropdown.append("<option value="+club["tid"]+">"+club["name"]+"</option>")
                 }
+                clubsDropdown.append("<option value='All'>Any</option>")
             }
         })
     })
