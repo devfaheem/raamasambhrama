@@ -13,3 +13,7 @@ vue-multi-registration:
     js/axios.min.js: {}
     https://unpkg.com/vee-validate@<3.0.0: {external: true, minified: true}
     js/multi_registration.js: {}
+
+rotary-events:
+  js:
+    js/events_main.js: {}

@@ -108,3 +108,8 @@ function rotary_events_main_form_alter(&$form, FormStateInterface $form_state, $
     //    \Drupal::logger('my_module')->notice('<pre><code>' . print_r($form, TRUE) . '</code></pre>');
   }
 }
+
+
+function rotary_events_main_page_attachments(array &$page) {
+  $page['#attached']['library'][] = 'rotary_events_main/rotary-events';
+}
