@@ -8,11 +8,11 @@
             success: function(data){
                 var clubsDropdown = $("#edit-field-club-target-id")
                 clubsDropdown.find('option').remove();
+                clubsDropdown.append("<option value='All'>Any</option>")
                 for(index in data){
                     var club = data[index]
                     clubsDropdown.append("<option value="+club["tid"]+">"+club["name"]+"</option>")
                 }
-                clubsDropdown.append("<option value='All'>Any</option>")
             }
         })
     })
