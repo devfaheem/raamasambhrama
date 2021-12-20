@@ -1,5 +1,35 @@
 <?php 
+use Drupal\Core\Field\BaseFieldDefinition;
+
 function rotary_events_main_update_8001() {
   \Drupal::entityDefinitionUpdateManager()
       ->installEntityType(\Drupal::entityTypeManager()->getDefinition('user_deliverables_entity'));
+}
+
+function rotary_events_main_update_8002(){
+  $field_storage_definition = BaseFieldDefinition::create('boolean')
+     ->setLabel(t('Is User Checked In'))
+      ->setDescription(t('A boolean indicating whether the user is checked in.'))
+      ->setDefaultValue(null);
+    \Drupal::entityDefinitionUpdateManager()
+    ->installFieldStorageDefinition('ischeckedin', 'user_deliverables_entity', 'user_deliverables_entity', $field_storage_definition);
+}
+
+function rotary_events_main_update_8003(){
+  $field_storage_definition = BaseFieldDefinition::create('string_long')
+      ->setLabel(t('Check In Data'))
+      ->setDisplayOptions('view', [
+        'label' => 'above',
+        'type' => 'string',
+        'weight' => -4,
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'string_textfield',
+        'weight' => -4,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    \Drupal::entityDefinitionUpdateManager()
+    ->installFieldStorageDefinition('checkindata', 'user_deliverables_entity', 'user_deliverables_entity', $field_storage_definition);
 }

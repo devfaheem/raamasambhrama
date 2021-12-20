@@ -315,6 +315,12 @@ class UserDeliverablesEntity extends ContentEntityBase implements UserDeliverabl
         'weight' => -3,
       ]);
 
+    $fields['ischeckedin'] = BaseFieldDefinition::create('string')
+    ->setLabel(t('Is User Checked In'))
+     ->setDescription(t('A value indicating whether the user is checked in/checked out.'))
+     ->setDefaultValue(null);
+
+
     $fields['created'] = BaseFieldDefinition::create('created')
       ->setLabel(t('Created'))
       ->setDescription(t('The time that the entity was created.'));
@@ -322,6 +328,21 @@ class UserDeliverablesEntity extends ContentEntityBase implements UserDeliverabl
     $fields['changed'] = BaseFieldDefinition::create('changed')
       ->setLabel(t('Changed'))
       ->setDescription(t('The time that the entity was last edited.'));
+
+
+    $fields['checkindata'] = BaseFieldDefinition::create('string_long')
+      ->setLabel(t('Check In Data'))
+      ->setDisplayOptions('view', [
+        'label' => 'above',
+        'type' => 'string',
+        'weight' => -4,
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'string_textfield',
+        'weight' => -4,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
 
     return $fields;
   }

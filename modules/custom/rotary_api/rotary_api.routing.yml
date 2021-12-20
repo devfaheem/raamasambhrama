@@ -2,10 +2,20 @@ rotary_api.update_qr_status:
   path: "/update/qr/status"
   methods: [POST]
   defaults:
-    _controller: 'Drupal\rotary_api\Controller\QRApiController::updateQRStatus'
+    _controller: 'Drupal\rotary_api\Controller\QRApiController::updateScanStatus'
     _title: "Update QR Status"
   requirements:
     _access: "TRUE"
+
+rotary_api.update_checkin_status:
+  path: "/update/checkin/status"
+  methods: [POST]
+  defaults:
+    _controller: 'Drupal\rotary_api\Controller\QRApiController::updateCheckinStatus'
+    _title: "Update Checkin Status"
+  requirements:
+    _access: "TRUE"
+
 
 rotary_api.get_scanned_qrs:
   path: "/get/scanned/qrs"
@@ -13,5 +23,14 @@ rotary_api.get_scanned_qrs:
   defaults:
     _controller: 'Drupal\rotary_api\Controller\QRApiController::getScannedQrCodes'
     _title: "Scanned QR Status"
+  requirements:
+    _access: "TRUE"
+
+rotary_api.get_user_details:
+  path: "/get/event/user/details"
+  methods: [GET]
+  defaults:
+    _controller: 'Drupal\rotary_api\Controller\QRApiController::getUserDetails'
+    _title: "Get User Details"
   requirements:
     _access: "TRUE"
