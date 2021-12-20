@@ -26,7 +26,7 @@ class QRApiController extends ControllerBase
         ->condition("registrant_id", $registrantId)
         ->condition("deliverable", $deliverableId)
         ->execute();
-        $userDetails = $this->getUsedDetails($registrantId, $deliverableId);
+        $userDetails = $this->getUserDetail($registrantId, $deliverableId);
         return new JsonResponse(["data"=>$userDetails,"message"=>"Updated Record Successfully" , "status"=>"Success"]);
     }
 
