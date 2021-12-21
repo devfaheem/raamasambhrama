@@ -22,7 +22,7 @@ class QRApiController extends ControllerBase
             return new JsonResponse(["message"=>"Already Scanned","status"=>"Failure"]);
         }
         $status = $db->update("user_deliverables_entity")
-        ->fields(["is_scanned" => true,"scanned_date"=> date("Y-m-d H:i:s")])
+        ->fields(["is_scanned" => true,"scanned_date"=> date("Y-m-dTH:i:s")])
         ->condition("registrant_id", $registrantId)
         ->condition("deliverable", $deliverableId)
         ->execute();
@@ -66,7 +66,7 @@ class QRApiController extends ControllerBase
         ->fields([
         "is_scanned"=>true,    
         "ischeckedin" => $status,
-        "scanned_date"=> date("Y-m-d H:i:s"),
+        "scanned_date"=> date("Y-m-dTH:i:s"),
         "checkindata"=> json_encode($checkindata)
         ])
         ->condition("registrant_id", $registrantId)
