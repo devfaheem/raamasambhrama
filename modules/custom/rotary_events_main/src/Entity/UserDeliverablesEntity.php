@@ -255,12 +255,9 @@ class UserDeliverablesEntity extends ContentEntityBase implements UserDeliverabl
       ->setDisplayConfigurable('form', TRUE);
 
     $fields['scanned_date'] = BaseFieldDefinition::create('datetime')
-      ->setLabel(t('Only Date'))
-      ->setDescription(t('Date field example.'))
+      ->setLabel(t('Scanned Date'))
+      ->setDescription(t('Date of first scan.'))
       ->setRevisionable(TRUE)
-      ->setSettings([
-        'datetime_type' => 'date',
-      ])
       ->setDefaultValue('')
       ->setDisplayOptions('view', [
         'label' => 'above',

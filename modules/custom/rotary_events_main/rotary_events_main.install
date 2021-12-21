@@ -33,3 +33,14 @@ function rotary_events_main_update_8003(){
     \Drupal::entityDefinitionUpdateManager()
     ->installFieldStorageDefinition('checkindata', 'user_deliverables_entity', 'user_deliverables_entity', $field_storage_definition);
 }
+
+function rotary_events_main_update_8004(){
+$entity_update_manager = \Drupal::entityDefinitionUpdateManager();
+$entity_type = $entity_update_manager->getEntityType('user_deliverables_entity');
+$entity_update_manager->uninstallEntityType($entity_type);
+}
+
+function rotary_events_main_update_8005() {
+  \Drupal::entityDefinitionUpdateManager()
+      ->installEntityType(\Drupal::entityTypeManager()->getDefinition('user_deliverables_entity'));
+}
