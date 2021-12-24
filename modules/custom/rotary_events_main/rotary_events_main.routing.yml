@@ -4,7 +4,7 @@ rotary_events_main.registration_approval_form:
     _form: '\Drupal\rotary_events_main\Form\RegistrationApprovalForm'
     _title: 'RegistrationApprovalForm'
   requirements:
-    _access: 'TRUE'
+    _access: 'FALSE'
 
 rotary_events_main.registration_controller_registration:
   path: '/3182event/registration'

@@ -44,3 +44,39 @@ function rotary_events_main_update_8005() {
   \Drupal::entityDefinitionUpdateManager()
       ->installEntityType(\Drupal::entityTypeManager()->getDefinition('user_deliverables_entity'));
 }
+
+
+function rotary_events_main_update_8006(){
+  $field_storage_definition = BaseFieldDefinition::create('list_string')
+      ->setLabel(t('Food Counter'))
+      ->setDescription(t('Food Counter.'))
+      ->setSettings([
+      'allowed_values' => [
+        'veg' => 'veg',
+        'nonveg' => 'nonveg',
+      ],
+    ]);
+    \Drupal::entityDefinitionUpdateManager()
+    ->installFieldStorageDefinition('food_counter', 'user_deliverables_entity', 'user_deliverables_entity', $field_storage_definition);
+}
+
+function rotary_events_main_update_8007(){
+  $field_storage_definition = BaseFieldDefinition::create('boolean')
+    ->setLabel(t('Food Type Changed'))
+    ->setDescription(t('A boolean indicating whether food type is changed.'))
+    ->setDefaultValue(FALSE)
+    ->setSettings(['on_label' => 'Yes', 'off_label' => 'No'])
+    ->setDisplayOptions('view', [
+      'label' => 'visible',
+      'type' => 'boolean',
+      'weight' => 2,
+    ])
+    ->setDisplayOptions('form', [
+      'type' => 'boolean_checkbox',
+      'weight' => 2,
+    ])
+    ->setDisplayConfigurable('view', TRUE)
+    ->setDisplayConfigurable('form', TRUE);
+    \Drupal::entityDefinitionUpdateManager()
+    ->installFieldStorageDefinition('food_counter_changed', 'user_deliverables_entity', 'user_deliverables_entity', $field_storage_definition);
+}

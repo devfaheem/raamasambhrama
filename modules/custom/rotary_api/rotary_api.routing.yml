@@ -5,7 +5,7 @@ rotary_api.update_qr_status:
     _controller: 'Drupal\rotary_api\Controller\QRApiController::updateScanStatus'
     _title: "Update QR Status"
   requirements:
-    _access: "TRUE"
+    _role: "administrator+qr_code_coordinator"
 
 rotary_api.update_checkin_status:
   path: "/update/checkin/status"
@@ -14,7 +14,7 @@ rotary_api.update_checkin_status:
     _controller: 'Drupal\rotary_api\Controller\QRApiController::updateCheckinStatus'
     _title: "Update Checkin Status"
   requirements:
-    _access: "TRUE"
+    _role: "administrator+qr_code_coordinator"
 
 
 rotary_api.get_scanned_qrs:
@@ -24,7 +24,7 @@ rotary_api.get_scanned_qrs:
     _controller: 'Drupal\rotary_api\Controller\QRApiController::getScannedQrCodes'
     _title: "Scanned QR Status"
   requirements:
-    _access: "TRUE"
+    _role: "administrator+qr_code_coordinator"
 
 rotary_api.get_user_details:
   path: "/get/event/user/details"
@@ -33,4 +33,4 @@ rotary_api.get_user_details:
     _controller: 'Drupal\rotary_api\Controller\QRApiController::getUserDetails'
     _title: "Get User Details"
   requirements:
-    _access: "TRUE"
+    _role: "administrator+qr_code_coordinator"

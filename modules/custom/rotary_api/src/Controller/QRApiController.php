@@ -13,6 +13,8 @@ class QRApiController extends ControllerBase
         $requestData = json_decode($requestData);
         $registrantId = $requestData->registrant_id;
         $deliverableId = $requestData->deliverable_id;
+        $foodCounterType = $requestData->food_counter_type;
+        $foodCounterChanged = $requestData->food_counter_changed;
         $db = \Drupal::database();
         $q1 = "select count(*) as count from user_deliverables_entity where is_scanned = true and registrant_id = '$registrantId' and deliverable = '$deliverableId'";
         $r1 = $db->query($q1);
@@ -22,7 +24,12 @@ class QRApiController extends ControllerBase
             return new JsonResponse(["message"=>"Already Scanned","status"=>"Failure"]);
         }
         $status = $db->update("user_deliverables_entity")
-        ->fields(["is_scanned" => true,"scanned_date"=> date("Y-m-d\TH:i:s")])
+        ->fields([
+        "is_scanned" => true,
+        "scanned_date"=> date("Y-m-d\TH:i:s"),
+        "food_counter"=>$foodCounterType,
+        "food_counter_changed"=>$foodCounterChanged?1:0
+        ])
         ->condition("registrant_id", $registrantId)
         ->condition("deliverable", $deliverableId)
         ->execute();

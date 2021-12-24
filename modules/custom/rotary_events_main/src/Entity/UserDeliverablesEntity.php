@@ -341,6 +341,34 @@ class UserDeliverablesEntity extends ContentEntityBase implements UserDeliverabl
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
+    $fields['food_counter'] = BaseFieldDefinition::create('list_string')
+      ->setLabel(t('Food Counter'))
+      ->setDescription(t('Food Counter.'))
+      ->setSettings([
+      'allowed_values' => [
+        'veg' => 'veg',
+        'nonveg' => 'nonveg',
+      ],
+    ]);
+
+    $fields['food_counter_changed'] = BaseFieldDefinition::create('boolean')
+    ->setLabel(t('Food Type Changed'))
+    ->setDescription(t('A boolean indicating whether food type is changed.'))
+    ->setDefaultValue(FALSE)
+    ->setSettings(['on_label' => 'Yes', 'off_label' => 'No'])
+    ->setDisplayOptions('view', [
+      'label' => 'visible',
+      'type' => 'boolean',
+      'weight' => 2,
+    ])
+    ->setDisplayOptions('form', [
+      'type' => 'boolean_checkbox',
+      'weight' => 2,
+    ])
+    ->setDisplayConfigurable('view', TRUE)
+    ->setDisplayConfigurable('form', TRUE);
+
+
     return $fields;
   }
 }
