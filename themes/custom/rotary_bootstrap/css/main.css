@@ -51,3 +51,19 @@ body {
 .alert-error a{
   display:none
 }
+
+.qr-circle-red{
+  font-size:37px;
+  color:red
+}
+.qr-circle-green{
+  font-size:37px;
+  color:green
+}
+
+.qr-code-image{
+  margin-bottom: -36px;
+  position: relative;
+  z-index: -1;
+  margin-top: -28px;
+}
