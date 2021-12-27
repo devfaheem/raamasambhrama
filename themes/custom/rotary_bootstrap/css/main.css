@@ -67,3 +67,7 @@ body {
   z-index: -1;
   margin-top: -28px;
 }
+
+.toolbar-oriented .toolbar-bar {
+  z-index: 9999 !important;
+}
