@@ -3,7 +3,7 @@
     checkZoneField()
     function checkZoneField(){
         var zone = qs("field_zone_target_id");
-        if(zone_id == null){
+        if(zone == null){
             return;
         }
         $.ajax({
