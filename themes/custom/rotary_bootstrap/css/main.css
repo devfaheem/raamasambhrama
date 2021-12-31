@@ -71,3 +71,8 @@ body {
 .toolbar-oriented .toolbar-bar {
   z-index: 9999 !important;
 }
+
+.banner-conference-two .parallax-scene-1{
+  background-image: url(/sites/default/files/bg.jpg);
+  background-size: cover;
+}
