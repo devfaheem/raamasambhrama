@@ -39,3 +39,27 @@ rotary_events_main.reset_password_form:
     _title: 'ResetPasswordForm'
   requirements:
     _access: 'TRUE'
+
+rotary_events_main.programme_day_1:
+  path: '/event-programs'
+  defaults:
+    _controller: '\Drupal\rotary_events_main\Controller\EventPagesController::eventsDay1'
+    _title: 'Event Day 1'
+  requirements:
+    _access: 'TRUE'
+
+rotary_events_main.programme_day_2:
+  path: '/programmes/day2'
+  defaults:
+    _controller: '\Drupal\rotary_events_main\Controller\EventPagesController::eventsDay2'
+    _title: 'Event Day 2'
+  requirements:
+    _access: 'TRUE'
+
+rotary_events_main.programme_day_3:
+  path: '/programmes/day3'
+  defaults:
+    _controller: '\Drupal\rotary_events_main\Controller\EventPagesController::eventsDay3'
+    _title: 'Event Day 3'
+  requirements:
+    _access: 'TRUE'
