@@ -76,3 +76,11 @@ body {
   background-image: url(/sites/default/files/bg.jpg);
   background-size: cover;
 }
+
+.view-duplicate-of-printable-qr-codes .views-field-nothing-2 h5{
+  text-transform: uppercase;
+}
+
+.views-field-nothing-2{
+  text-transform: uppercase;
+}
