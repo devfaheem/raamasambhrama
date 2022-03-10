@@ -36,11 +36,11 @@ class QRApiController extends ControllerBase
 
 
         $userDetails = $this->getUserDetail($registrantId, $deliverableId);
-        if($request->deliverable_id == "708" ||  $request->deliverable_id == 708){
-            $this->recieveMomentoSMS($requestData->registrant_id);
+        if($deliverableId == "708" ||  $deliverableId == 708){
+            $this->recieveMomentoSMS($registrantId);
         }
-        if($request->deliverable_id == "706" ||  $request->deliverable_id == 706){
-            $this->recieveIdCardSMS($requestData->registrant_id);
+        if($deliverableId== "706" ||  $deliverableId == 706){
+            $this->recieveIdCardSMS($registrantId);
         }
         return new JsonResponse(["data"=>$userDetails,"message"=>"Updated Record Successfully" , "status"=>"Success"]);
     }
