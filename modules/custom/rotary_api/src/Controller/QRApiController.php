@@ -33,8 +33,57 @@ class QRApiController extends ControllerBase
         ->condition("registrant_id", $registrantId)
         ->condition("deliverable", $deliverableId)
         ->execute();
+
+
         $userDetails = $this->getUserDetail($registrantId, $deliverableId);
+        if($request->deliverable_id == "708" ||  $request->deliverable_id == 708){
+            $this->recieveMomentoSMS($requestData->registrant_id);
+        }
+        if($request->deliverable_id == "706" ||  $request->deliverable_id == 706){
+            $this->recieveIdCardSMS($userDetails["mobile"]);
+        }
         return new JsonResponse(["data"=>$userDetails,"message"=>"Updated Record Successfully" , "status"=>"Success"]);
+    }
+
+    function recieveIdCardSMS($userid){
+        $textLocal = new \Drupal\rotary_api\Controller\TextLocalProvider('usha.cs@sahyadri.edu.in', 'Aptra2017', false);
+        $mobile = $this->getMobileNumber($userid);
+        if($mobile == null) { return;}
+        $numbers = array($mobile);
+        $sender = 'APTTCH';
+        $message2 = "Dear delegate, Your code-tag scanned for Receiving ID Card. This is for your information. Thank you. Team Raama Sambhrama. APTTCH";
+        try {
+
+            $result = $textLocal->sendSms($numbers, $message2, $sender);
+        } catch (\Exception $e) {
+        }
+    }
+
+    function recieveMomentoSMS($userid){
+        $textLocal = new \Drupal\rotary_api\Controller\TextLocalProvider('usha.cs@sahyadri.edu.in', 'Aptra2017', false);
+        $mobile = $this->getMobileNumber($userid);
+        if($mobile == null) { return;}
+        $numbers = array($mobile);
+        $sender = 'APTTCH';
+        $message2 = "Dear delegate, Your code-tag scanned for Receiving Event Momento. This is for your information. Thank you. Team Raama Sambhrama. APTTCH";
+        try {
+            $result = $textLocal->sendSms($numbers, $message2, $sender);
+        } catch (\Exception $e) {
+        }
+    }
+
+    
+    function getMobileNumber($userid){
+        $db = \Drupal::database();
+        $query = "select field_mobile_value as mobile from user__field_mobile where entity_id = $userid";
+        $result = $db->query($query);
+        $result = $result->fetchObject();
+        try{
+            return $result["mobile"];
+        }
+        catch(\PDOException $e){
+            return null;
+        }
     }
 
     function updateCheckinStatus(Request $request){
@@ -128,6 +177,7 @@ class QRApiController extends ControllerBase
         $result = $result->fetchAll();
         return new JsonResponse($result);
     }
+
 
     function getUserDetail($registrantId, $deliverableId){
         $query =  "
