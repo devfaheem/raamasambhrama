@@ -7,7 +7,7 @@ rotary_events_main.registration_approval_form:
     _access: 'FALSE'
 
 rotary_events_main.registration_controller_registration:
-  path: '/3182event/registration'
+  path: '/3182event/post/entries/registration/'
   defaults:
     _controller: '\Drupal\rotary_events_main\Controller\RegistrationController::registrationForm'
     _title: 'Single Registration Form'
@@ -15,7 +15,7 @@ rotary_events_main.registration_controller_registration:
     _access: 'TRUE'
 
 rotary_events_main.multi_registration:
-  path: '/3182event/multiple/registration'
+  path: '/3182event/post/entries/multiple/registration'
   defaults:
     _controller: '\Drupal\rotary_events_main\Controller\RegistrationController::multipleRegistrationForm'
     _title: 'Multiple Registration Form'
