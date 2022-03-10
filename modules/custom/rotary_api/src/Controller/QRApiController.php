@@ -51,9 +51,9 @@ class QRApiController extends ControllerBase
         if($mobile == null) { return;}
         $numbers = array($mobile);
         $sender = 'APTTCH';
-        $message2 = "Dear delegate, Your code-tag scanned for Receiving ID Card. This is for your information. Thank you. Team Raama Sambhrama. APTTCH";
+        $message2 = "Dear delegate, Your code/tag scanned for receiving event IDCard. This is for your information. Thank you. Team Raama Sambhrama. APTTCH";
         try {
-
+            $sender = 'APTTCH';
             $result = $textLocal->sendSms($numbers, $message2, $sender);
         } catch (\Exception $e) {
         }
@@ -65,7 +65,7 @@ class QRApiController extends ControllerBase
         if($mobile == null) { return;}
         $numbers = array($mobile);
         $sender = 'APTTCH';
-        $message2 = "Dear delegate, Your code-tag scanned for Receiving Event Momento. This is for your information. Thank you. Team Raama Sambhrama. APTTCH";
+        $message2 = "Dear delegate, Your code/tag scanned for receiving event Momento. This is for your information. Thank you. Team Raama Sambhrama. APTTCH";
         try {
             $result = $textLocal->sendSms($numbers, $message2, $sender);
         } catch (\Exception $e) {
@@ -79,7 +79,7 @@ class QRApiController extends ControllerBase
         $result = $db->query($query);
         $result = $result->fetchObject();
         try{
-            return $result["mobile"];
+            return $result->mobile;
         }
         catch(\PDOException $e){
             return null;
