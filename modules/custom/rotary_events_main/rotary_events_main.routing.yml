@@ -7,7 +7,7 @@ rotary_events_main.registration_approval_form:
     _access: 'FALSE'
 
 rotary_events_main.registration_controller_registration:
-  path: '/3182event/post/entries/registration/'
+  path: '/3182event/post/entries/registration'
   defaults:
     _controller: '\Drupal\rotary_events_main\Controller\RegistrationController::registrationForm'
     _title: 'Single Registration Form'
